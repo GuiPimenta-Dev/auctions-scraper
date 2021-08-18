@@ -1,9 +1,9 @@
 import scrapy
 from bs4 import BeautifulSoup
 from scrapy import FormRequest
-from ..utils.parser import Parser
-from ..constants.constants import AreasTypesEnum
+
 from ..items import AuctionsItem
+from ..utils.parser import Parser
 
 
 class KronbergleiloesSpider(scrapy.Spider):
