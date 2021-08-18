@@ -1,11 +1,19 @@
 from scrapy.selector import Selector
+import re
 
 
 class Parser:
 
-    def parse_string_to_html(self, raw_string: str, xpath: str):
+    def get_multiple_values_from_string(self, raw_string: str, xpath: str):
         response = Selector(text=raw_string).xpath(xpath).extract()
         return ' '.join(response)
+
+    def get_single_value_from_string(self, raw_string: str, xpath: str):
+        return Selector(text=raw_string).xpath(xpath).get()
+
+    def clean_html_tags_from_string(self, raw_string: str):
+        cleanr = re.compile('<.*?>')
+        return re.sub(cleanr, '', raw_string)
 
     def raw_header_to_dict(self, raw_headers: str) -> dict:
         raw_headers = raw_headers.split('\n')

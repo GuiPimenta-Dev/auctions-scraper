@@ -1,16 +1,14 @@
 import scrapy
 from bs4 import BeautifulSoup
-import re
-
 from scrapy.http import Response
 
 from ..items import AuctionsItem
 from ..utils.parser import Parser
+from ..constants.constants import GroundTypeEnum as GTEnum
 
 
 class SantacatarinaleiloesSpider(scrapy.Spider):
     name = 'santacatarinaleiloes'
-    start_urls = ['http://www.santacatarinaleiloes.com.br/']
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
         "Accept-Encoding": "gzip, deflate",
@@ -26,36 +24,24 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
     }
     site = 'santa catarina leiloes'
     parser = Parser()
+    inicial_urls = {GTEnum.COMMERCIAL: 'http://www.santacatarinaleiloes.com.br/lotes/index/id/18',
+                    GTEnum.RESIDENTIAL: 'http://www.santacatarinaleiloes.com.br/lotes/index/id/8',
+                    GTEnum.RURAL: 'http://www.santacatarinaleiloes.com.br/lotes/index/id/7'}
+
+    def __init__(self, category):
+        self.start_urls = []
+        if category == GTEnum.COMMERCIAL:
+            self.start_urls.append(self.inicial_urls[GTEnum.COMMERCIAL])
+        elif category == GTEnum.RESIDENTIAL:
+            self.start_urls.append(self.inicial_urls[GTEnum.RESIDENTIAL])
+        elif category == GTEnum.RURAL:
+            self.start_urls.append(self.inicial_urls[GTEnum.RURAL])
+        else:
+            for _, value in self.inicial_urls.items():
+                self.start_urls.append(value)
 
     def parse(self, response):
 
-        url = "http://www.santacatarinaleiloes.com.br/lotes/index/id/18"
-        yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_comercial_houses)
-
-    def parse_comercial_houses(self, response):
-
-        item = self.parse_response(response=response)
-
-        yield item
-
-        url = 'http://www.santacatarinaleiloes.com.br/lotes/index/id/8'
-        yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_residencial_houses)
-
-    def parse_residencial_houses(self, response):
-
-        item = self.parse_response(response)
-
-        yield item
-
-        url = 'http://www.santacatarinaleiloes.com.br/lotes/index/id/7'
-        yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_rural_houses)
-
-    def parse_rural_houses(self, response):
-        item = self.parse_response(response=response)
-
-        yield item
-
-    def parse_response(self, response: Response):
         item = AuctionsItem()
         item['site'] = 'Santa Catarina leiloes'
 
@@ -75,4 +61,4 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
 
         item['url'] = response.url
 
-        return item
+        yield item

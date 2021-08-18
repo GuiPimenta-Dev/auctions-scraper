@@ -1,6 +1,7 @@
 import scrapy
 from bs4 import BeautifulSoup
 from scrapy import FormRequest
+from ..constants.constants import GroundTypeEnum as GTEnum
 
 from ..items import AuctionsItem
 from ..utils.parser import Parser
@@ -10,7 +11,8 @@ class KronbergleiloesSpider(scrapy.Spider):
     name = 'kronbergleiloes'
     parser = Parser()
     id_tipo = '10'
-    id_subtipo = {"rural": '52', "industrial": '50', "residencial": '51', "comercial": '49', "terreno": '90'}
+    id_subtipo = {GTEnum.ALL: '', GTEnum.RURAL: '52', GTEnum.RESIDENTIAL: '51',
+                  GTEnum.COMMERCIAL: '49'}
     id_cidades = {'agudos_do_sul': '123', 'apiacas': '445', 'apucarana': '457', 'arapongas': '528', 'ararangua': '541',
                   'araucaria': '562', 'bandeirantes': '777', 'bituruna': '1036', 'bocaiuva_do_sul': '1096',
                   'cambe': '1521', 'campina_grande_do_sul': '1557', 'campo_largo': '1594', 'cascavel': '1890',
@@ -33,9 +35,9 @@ class KronbergleiloesSpider(scrapy.Spider):
     def parse(self, response):
         data = {
             "id_tipo_lote": self.id_tipo,
-            "id_subtipo": self.id_subtipo['residencial'],
+            "id_subtipo": self.id_subtipo[self.category],
             "estado": '',
-            "id_cidades": self.id_cidades['colombo'],
+            "id_cidades": self.id_cidades[self.city],
             'Ped': 'Pesquisar'
         }
 
@@ -47,14 +49,11 @@ class KronbergleiloesSpider(scrapy.Spider):
     def parse_auction_response(self, response):
         item = AuctionsItem()
 
-        divs = response.xpath('//div[@class="bid-details"]').extract()
-        for index, div in enumerate(divs):
+        divs = response.xpath('//section[@class="infos"]').extract()
+        for div in divs:
             item['site'] = 'Kronberg Leilões'
-            item['price'] = BeautifulSoup(response.xpath('//div[@class="linha-valor-leilao active"]').extract()[index],
-                                           features="lxml").get_text(strip=True).split(':')[1]
-            item['url'] = self.parser.parse_string_to_html(raw_string=div, xpath='//a/@href')
-
-            item['description'] = self.parser.parse_string_to_html(raw_string=div, xpath='//a/text()')
+            item['price'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="linha-valor-leilao active"]//span/text()')
+            item['url'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="linha-valor-leilao active"]//a/@href')
+            item['description'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="bid-details"]//a/text()')
 
             yield item
-
