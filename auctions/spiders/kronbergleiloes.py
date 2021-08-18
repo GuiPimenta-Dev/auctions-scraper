@@ -50,20 +50,11 @@ class KronbergleiloesSpider(scrapy.Spider):
         divs = response.xpath('//div[@class="bid-details"]').extract()
         for index, div in enumerate(divs):
             item['site'] = 'Kronberg Leilões'
-            ground_area = self.parser.get_area_from_raw_string(div, AreasTypesEnum.TERRENO)
-
-            if ground_area:
-                item['ground_area'] = ground_area
-
-            house_area = self.parser.get_area_from_raw_string(div, AreasTypesEnum.CASA)
-            if house_area:
-                item['house_area'] = house_area
-
-            neighborhood = self.parser.get_neighborhood_from_raw_string(div)
-            if neighborhood:
-                item['neighborhood'] = neighborhood
-
-            item['description'] = BeautifulSoup(div, features="lxml").get_text()
             item['price'] = BeautifulSoup(response.xpath('//div[@class="linha-valor-leilao active"]').extract()[index],
                                            features="lxml").get_text(strip=True).split(':')[1]
+            item['url'] = self.parser.parse_string_to_html(raw_string=div, xpath='//a/@href')
+
+            item['description'] = self.parser.parse_string_to_html(raw_string=div, xpath='//a/text()')
+
             yield item
+

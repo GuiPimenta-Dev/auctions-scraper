@@ -1,9 +1,11 @@
 import scrapy
 from bs4 import BeautifulSoup
 import re
+
+from scrapy.http import Response
+
 from ..items import AuctionsItem
 from ..utils.parser import Parser
-
 
 
 class SantacatarinaleiloesSpider(scrapy.Spider):
@@ -22,6 +24,7 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
         "Referer": "http://www.santacatarinaleiloes.com.br/",
         "Upgrade-Insecure-Requests": "1"
     }
+    site = 'santa catarina leiloes'
     parser = Parser()
 
     def parse(self, response):
@@ -30,41 +33,17 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
         yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_comercial_houses)
 
     def parse_comercial_houses(self, response):
-        item = AuctionsItem()
-        res = response.xpath('//div[@class="ds_itens_lote_ds"]').extract_first()
-        ground_type = re.search('(?<=Terreno )(\w+)', res)
-        area, _, _ = res.partition('m²')
-        area = area.split(' ')[-1]
-        # item['ground_area'] = self.parser.get_area_from_raw_string(res, AreasTypesEnum.TERRENO)
-        # item['house_area'] = self.parser.get_area_from_raw_string(res, AreasTypesEnum.CASA)
-        res = BeautifulSoup(res,
-                            features="lxml").get_text().strip().split('\n')
 
-        if ground_type:
-            item['ground_type'] = ground_type.group().capitalize()
-
-        if area:
-            item['house_area'] = area
-
-        for i in res:
-           if 'Valor.' in i:
-               item['price'] = i.split('Valor.')[1].strip()
-
-           elif 'Cidade/Comarca.' in i:
-               item['city'] = i.split('Cidade/Comarca.')[1].strip()
-
-           elif 'Bens.' in i:
-               item['description'] = i.split('Bens.')[1].strip()
+        item = self.parse_response(response=response)
 
         yield item
 
         url = 'http://www.santacatarinaleiloes.com.br/lotes/index/id/8'
-
         yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_residencial_houses)
 
     def parse_residencial_houses(self, response):
-        item = AuctionsItem()
-        # TODO Refazer este robo quando o site possuir processos encontrados
+
+        item = self.parse_response(response)
 
         yield item
 
@@ -72,10 +51,28 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
         yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_rural_houses)
 
     def parse_rural_houses(self, response):
-        item = AuctionsItem()
-        # TODO Refazer este robo quando o site possuir processos encontrados
+        item = self.parse_response(response=response)
 
         yield item
 
+    def parse_response(self, response: Response):
+        item = AuctionsItem()
+        item['site'] = 'Santa Catarina leiloes'
 
+        res = response.xpath('//div[@class="ds_itens_lote_ds"]').extract_first()
+        try:
+            res = BeautifulSoup(res,
+                                features="lxml").get_text().strip().split('\n')
+        except:
+            return
 
+        for i in res:
+            if 'Valor.' in i:
+                item['price'] = i.split('Valor.')[1].strip()
+
+            elif 'Bens.' in i:
+                item['description'] = i.split('Bens.')[1].strip()
+
+        item['url'] = response.url
+
+        return item

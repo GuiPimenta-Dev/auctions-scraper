@@ -1,22 +1,11 @@
-import re
-from bs4 import BeautifulSoup
-from ..constants.constants import ItemsEnums
+from scrapy.selector import Selector
 
 
 class Parser:
 
-    def get_area_from_raw_string(self, raw_string: str, type_of_area: str) -> str:
-        if type_of_area in raw_string.lower():
-            return (
-                re.split(type_of_area, raw_string, flags=re.IGNORECASE)[1]
-                    .split('m²')[0]
-                    .strip()
-            )
-
-    def get_neighborhood_from_raw_string(self, raw_string: str) -> str:
-        _, _, after = raw_string.lower().partition(ItemsEnums.BAIRRO)
-        return BeautifulSoup(after.strip().split(' ')[0], features="lxml").get_text(strip=True).capitalize()
-
+    def parse_string_to_html(self, raw_string: str, xpath: str):
+        response = Selector(text=raw_string).xpath(xpath).extract()
+        return ' '.join(response)
 
     def raw_header_to_dict(self, raw_headers: str) -> dict:
         raw_headers = raw_headers.split('\n')
