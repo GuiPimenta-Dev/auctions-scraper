@@ -8,15 +8,15 @@ from ..utils.parser import Parser
 
 
 class NakakogueleiloesSpider(scrapy.Spider):
-    name = 'nakakogueleiloes'
+    name = 'psnleiloes'
     parser = Parser()
-    start_urls = ['https://www.nakakogueleiloes.com.br/lotes/consulta/1/']
+    start_urls = ['https://www.psnleiloes.com.br/lotes/consulta/1/']
 
     def parse(self, response):
         data = {
             "cmp-buscar": self.city
         }
-        url = 'https://www.nakakogueleiloes.com.br/lotes/consulta/1/'
+        url = 'https://www.psnleiloes.com.br/lotes/consulta/1/'
 
         yield FormRequest(url=url, formdata=data, callback=self.parse_response)
 
@@ -24,7 +24,7 @@ class NakakogueleiloesSpider(scrapy.Spider):
         item = AuctionsItem()
         uls = response.xpath('//ul[@id="itemContainer"]').extract()
         for ul in uls:
-            item['site'] = 'nakakogue leiloes'
+            item['site'] = 'psn leiloes'
 
             price = self.parser.get_multiple_values_from_string(raw_string=ul,
                                                                 xpath='//span')
@@ -33,11 +33,9 @@ class NakakogueleiloesSpider(scrapy.Spider):
             item['price'] = price[0] + ' ' + price[1]
 
             url = self.parser.get_single_value_from_string(raw_string=ul, xpath='//a[@class="botao"]/@href')
-            item['url'] = 'https://www.nakakogueleiloes.com.br/' + url
+            item['url'] = 'https://www.psnleiloes.com.br/' + url
 
-            item['description'] = self.parser.get_multiple_values_from_string(raw_string=ul, xpath='//h3[@class="titulo-lote"]/text()')
+            item['description'] = self.parser.get_multiple_values_from_string(raw_string=ul,
+                                                                              xpath='//h3[@class="titulo-lote"]/text()')
 
             yield item
-
-
-
