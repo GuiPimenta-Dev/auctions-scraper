@@ -1,5 +1,6 @@
 from scrapy.selector import Selector
 import re
+from unicodedata import normalize
 
 
 class Parser:
@@ -33,3 +34,16 @@ class Parser:
             del dict_header['user-agent']
 
         return dict_header
+
+    def parse_select_dict(self, raw_select: str):
+        opt = {}
+        raw_selects = raw_select.replace('<option value=', '').replace('"', '').replace('<select>', '').replace(
+            '</select>', '').strip().split('</option>')
+        for select in raw_selects:
+            if select:
+                value, _, key = select.partition('>')
+                key = key.lower().replace(' ', '_').replace("'",'')
+                key = normalize('NFKD', key).encode('ASCII', 'ignore').decode('ASCII')
+                opt[key] = value
+
+        return opt
