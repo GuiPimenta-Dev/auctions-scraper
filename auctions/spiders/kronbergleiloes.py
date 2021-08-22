@@ -1,8 +1,7 @@
 import scrapy
-from bs4 import BeautifulSoup
 from scrapy import FormRequest
-from ..constants.constants import GroundTypeEnum as GTEnum
 
+from ..constants.constants import GroundTypeEnum as GTEnum
 from ..items import AuctionsItem
 from ..utils.parser import Parser
 
@@ -10,10 +9,10 @@ from ..utils.parser import Parser
 class KronbergleiloesSpider(scrapy.Spider):
     name = 'kronbergleiloes'
     parser = Parser()
-    id_tipo = '10'
-    id_subtipo = {GTEnum.ALL: '', GTEnum.RURAL: '52', GTEnum.RESIDENTIAL: '51',
+    type_id = '10'
+    categorys_id = {GTEnum.ALL: '', GTEnum.RURAL: '52', GTEnum.RESIDENTIAL: '51',
                   GTEnum.COMMERCIAL: '49'}
-    id_cidades = {'agudos_do_sul': '123', 'apiacas': '445', 'apucarana': '457', 'arapongas': '528', 'ararangua': '541',
+    citys_id = {'agudos_do_sul': '123', 'apiacas': '445', 'apucarana': '457', 'arapongas': '528', 'ararangua': '541',
                   'araucaria': '562', 'bandeirantes': '777', 'bituruna': '1036', 'bocaiuva_do_sul': '1096',
                   'cambe': '1521', 'campina_grande_do_sul': '1557', 'campo_largo': '1594', 'cascavel': '1890',
                   'cianorte': '2056', 'colombo': '2125', 'cornelio_procopio': '2262', 'cruz_machado': '2403',
@@ -34,10 +33,10 @@ class KronbergleiloesSpider(scrapy.Spider):
 
     def parse(self, response):
         data = {
-            "id_tipo_lote": self.id_tipo,
-            "id_subtipo": self.id_subtipo[self.category],
+            "id_tipo_lote": self.type_id,
+            "id_subtipo": self.categorys_id[self.category],
             "estado": '',
-            "id_cidades": self.id_cidades[self.city],
+            "id_cidades": self.citys_id[self.city],
             'Ped': 'Pesquisar'
         }
 

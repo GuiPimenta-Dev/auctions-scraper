@@ -43,7 +43,7 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
     def parse(self, response):
 
         item = AuctionsItem()
-        item['site'] = 'Santa Catarina leiloes'
+        item['site'] = 'Santa Catarina leilões'
 
         res = response.xpath('//div[@class="ds_itens_lote_ds"]').extract_first()
         try:

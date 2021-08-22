@@ -24,7 +24,7 @@ class NakakogueleiloesSpider(scrapy.Spider):
         item = AuctionsItem()
         uls = response.xpath('//ul[@id="itemContainer"]').extract()
         for ul in uls:
-            item['site'] = 'psn leiloes'
+            item['site'] = 'Psn Leilões'
 
             price = self.parser.get_multiple_values_from_string(raw_string=ul,
                                                                 xpath='//span')

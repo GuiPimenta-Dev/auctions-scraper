@@ -18,7 +18,7 @@ class RochaleiloesSpider(scrapy.Spider):
         item = AuctionsItem()
         divs = response.xpath('//div[@class="listing-item rocha-listing-lote"]').extract()
         for div in divs:
-            item['site'] = 'rocha leiloes'
+            item['site'] = 'Rocha Leilões'
 
             price = self.parser.get_multiple_values_from_string(raw_string=div,
                                                                 xpath='//ul[@class="listing-details-valores"]//li')
