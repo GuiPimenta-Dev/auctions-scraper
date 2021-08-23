@@ -42,8 +42,15 @@ class Parser:
         for select in raw_selects:
             if select:
                 value, _, key = select.partition('>')
-                key = key.lower().replace(' ', '_').replace("'",'')
-                key = normalize('NFKD', key).encode('ASCII', 'ignore').decode('ASCII')
+                key = self.normalize_string(key)
                 opt[key] = value
 
         return opt
+
+    def normalize_string(self, raw_string):
+        treated_string = raw_string.lower().replace(' ', '_').replace("'", '')
+        return (
+            normalize('NFKD', treated_string)
+            .encode('ASCII', 'ignore')
+            .decode('ASCII')
+        )

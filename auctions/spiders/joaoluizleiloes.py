@@ -1,5 +1,4 @@
 import scrapy
-from ..constants.constants import GroundTypeEnum as GTEnum
 from ..items import AuctionsItem
 from ..utils.parser import Parser
 

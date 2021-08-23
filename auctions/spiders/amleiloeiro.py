@@ -100,8 +100,6 @@ class AmleiloeiroSpider(scrapy.Spider):
 
     start_urls = ['https://www.amleiloeiro.com.br/externo/']
 
-    def __init__(self, name=None, **kwargs):
-        super().__init__(name, kwargs)
 
     def parse(self, response):
 
