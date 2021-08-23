@@ -152,6 +152,11 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
 
             yield response.follow(url=url, callback=self.parse_description, cb_kwargs=item)
 
+        url = response.xpath('//span[@class="next"]//a/@href').get()
+
+        if url:
+            yield response.follow(url=url, callback=self.parse_response)
+
     def parse_description(self, response, **kwargs):
         item = kwargs
 
