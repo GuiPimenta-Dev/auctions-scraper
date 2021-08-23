@@ -100,7 +100,12 @@ class AmleiloeiroSpider(scrapy.Spider):
 
     start_urls = ['https://www.amleiloeiro.com.br/externo/']
 
+    def __init__(self, name=None, **kwargs):
+        super().__init__(name, kwargs)
+
     def parse(self, response):
+
+        global data_bem_estado_id, data_bem_cidade_id, data_bem_categoria_id
 
         if self.city in self.states_id:
             data_bem_estado_id = self.states_id[self.city]
@@ -115,7 +120,7 @@ class AmleiloeiroSpider(scrapy.Spider):
         if data_bem_estado_id is None and data_bem_cidade_id is None:
             return
 
-        if self.category == GTEnum.RESIDENTIAL or self.category == GTEnum.ALL:
+        if self.category in [GTEnum.RESIDENTIAL, GTEnum.ALL]:
             data_bem_categoria_id = "218"
         elif self.category == GTEnum.RURAL:
             data_bem_categoria_id = "222"
