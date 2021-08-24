@@ -14,7 +14,7 @@ class Parser:
 
     def clean_html_tags_from_string(self, raw_string: str):
         cleanr = re.compile('<.*?>')
-        return re.sub(cleanr, '', raw_string)
+        return re.sub(cleanr, '', raw_string).strip()
 
     def raw_header_to_dict(self, raw_headers: str) -> dict:
         raw_headers = raw_headers.split('\n')
