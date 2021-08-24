@@ -47,6 +47,17 @@ class Parser:
 
         return opt
 
+    def parse_select_dict_without_values(self, raw_select: str):
+        opt = []
+        options = raw_select.split('</option>')[1:]
+        for option in options:
+            cleaned_option = self.clean_html_tags_from_string(option.strip())
+            if cleaned_option:
+                opt.append(cleaned_option)
+
+        return opt
+
+
     def normalize_string(self, raw_string):
         treated_string = raw_string.lower().replace(' ', '_').replace("'", '')
         return (
