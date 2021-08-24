@@ -1,5 +1,3 @@
-from urllib.parse import urljoin
-
 import scrapy
 from scrapy import FormRequest
 
