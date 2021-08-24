@@ -145,7 +145,7 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
             url = self.parser.get_single_value_from_string(raw_string=div,
                                                            xpath='//div[@class="c-lote-descricao"]//a/@href')
 
-            item['url'] = url
+            item['url'] = urlQ
 
             item['description'] = self.parser.get_single_value_from_string(raw_string=div,
                                                                            xpath='//div[@class="c-lote-descricao"]//a/text()')

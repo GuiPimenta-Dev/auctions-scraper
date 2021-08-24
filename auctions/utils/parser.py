@@ -43,7 +43,7 @@ class Parser:
             if select:
                 value, _, key = select.partition('>')
                 key = self.normalize_string(key)
-                opt[key] = value
+                opt[key] = value.strip()
 
         return opt
 
