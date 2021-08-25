@@ -35,10 +35,12 @@ class Parser:
 
         return dict_header
 
-    def parse_select_dict(self, raw_select: str):
+    def parse_select_dict(self, raw_select: str, exclude_first_option=False):
         opt = {}
         raw_selects = raw_select.replace('<option value=', '').replace('"', '').replace('<select>', '').replace(
             '</select>', '').strip().split('</option>')
+        if exclude_first_option:
+            raw_selects = raw_selects[1:]
         for select in raw_selects:
             if select:
                 value, _, key = select.partition('>')
@@ -46,6 +48,7 @@ class Parser:
                 opt[key] = value.strip()
 
         return opt
+
 
     def parse_select_dict_without_values(self, raw_select: str):
         opt = []
@@ -57,11 +60,10 @@ class Parser:
 
         return opt
 
-
     def normalize_string(self, raw_string):
         treated_string = raw_string.lower().replace(' ', '_').replace("'", '')
         return (
             normalize('NFKD', treated_string)
-            .encode('ASCII', 'ignore')
-            .decode('ASCII')
+                .encode('ASCII', 'ignore')
+                .decode('ASCII')
         )
