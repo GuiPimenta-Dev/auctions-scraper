@@ -106,7 +106,7 @@ class ZukermanSpider(scrapy.Spider):
     def parse_description(self, response, **kwargs):
         item = kwargs
 
-        description = description = response.xpath('//div[@class="s-d-ld-i1 f-d"]//p/text()').extract()
+        description = response.xpath('//div[@class="s-d-ld-i1 f-d"]//p/text()').extract()
         description = ' '.join(description).strip()
 
 
