@@ -35,7 +35,8 @@ class Parser:
 
         return dict_header
 
-    def parse_select_dict(self, raw_select: str, exclude_first_option=False):
+    def parse_select_dict(self, raw_select: str, exclude_first_option=False, split_key: str = None,
+                          split_value: str = None):
         opt = {}
         raw_selects = raw_select.replace('<option value=', '').replace('"', '').replace('<select>', '').replace(
             '</select>', '').strip().split('</option>')
@@ -45,9 +46,41 @@ class Parser:
             if select:
                 value, _, key = select.partition('>')
                 key = self.normalize_string(key)
+                if split_key:
+                    key = key.split(split_key)[0]
+                if split_value:
+                    value = value.split(split_value)[0]
                 opt[key] = value.strip()
 
         return opt
+
+    def _parse_select_dict(self, raw_select: str, exclude_first_option=False, split_key: str = None,
+                           split_value: str = None
+                           ):
+        opt = {}
+        raw_selects = raw_select.strip().split('</option>')
+        if exclude_first_option:
+            raw_selects = raw_selects[1:]
+        for select in raw_selects:
+            if select:
+                _, _, after_value = select.partition(f'{split_value}="')
+                value = after_value.split('"')[0]
+                key,_,_ = select.partition(f'{split_key}')
+                key = key.split('>')[-1]
+
+                try:
+                    key = key.split('-')[0].strip()
+                except:
+                    pass
+                key = self.normalize_string(key)
+                opt[key] = value.strip()
+        try:
+            del opt['']
+        except:
+            pass
+        return opt
+
+
 
     def parse_biasleiloes_select(self, raw_select, exclude_first_option):
         parsed_select = {}
@@ -74,8 +107,28 @@ class Parser:
                 .decode('ASCII')
         )
 
+    def parse_category_based_on_description(self, description):
+        under_description = description.lower()
+        if 'apartamento' in under_description:
+            category = 'Apartamento'
+        elif 'casa' in under_description:
+            category = 'Casa'
+        elif 'residencial' in under_description:
+            category = 'Residencial'
+        elif 'comercial' in under_description:
+            category = 'Comercial'
+        elif 'chácara' in  under_description or 'chacara' in under_description:
+            category = 'Chácara'
+        elif 'rural' in under_description:
+            category = 'Rural'
+        elif 'terreno' in under_description:
+            category = 'Terreno'
+        else:
+            category = 'Não Identificado'
+
+        return category
+
     def check_if_is_house(self, description: str):
         under_description = description.lower()
         if 'apartamento' in under_description or 'casa' in under_description or 'comercial' in under_description or 'residencial' in under_description or 'rural' in under_description or 'terreno' in under_description:
             return True
-

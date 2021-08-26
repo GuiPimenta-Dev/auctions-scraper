@@ -11,5 +11,6 @@ class AuctionsItem(scrapy.Item):
     price = scrapy.Field()
     url = scrapy.Field()
     description = scrapy.Field()
+    category = scrapy.Field()
 
 

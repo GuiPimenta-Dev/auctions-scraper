@@ -5,33 +5,11 @@ from ..items import AuctionsItem
 from ..utils.parser import Parser
 from ..constants.constants import GroundTypeEnum as GTEnum
 
+
 class BiasleiloesSpider(scrapy.Spider):
     name = 'biasleiloes'
     parser = Parser()
 
-    states_opt = """<select id="LoteEstado" class="form-control select-search-estado">
-<option uf="AL" class="optUF" value="14">AL (3)</option>
-<option uf="AM" class="optUF" value="3">AM (2)</option>
-<option uf="BA" class="optUF" value="16">BA (6)</option>
-<option uf="CE" class="optUF" value="10">CE (5)</option>
-<option uf="GO" class="optUF" value="26">GO (46)</option>
-<option uf="MA" class="optUF" value="8">MA (1)</option>
-<option uf="MG" class="optUF" value="17">MG (20)</option>
-<option uf="MS" class="optUF" value="24">MS (4)</option>
-<option uf="MT" class="optUF" value="25">MT (1)</option>
-<option uf="PA" class="optUF" value="5">PA (23)</option>
-<option uf="PB" class="optUF" value="12">PB (35)</option>
-<option uf="PE" class="optUF" value="13">PE (7)</option>
-<option uf="PI" class="optUF" value="9">PI (15)</option>
-<option uf="PR" class="optUF" value="21">PR (10)</option>
-<option uf="RJ" class="optUF" value="19">RJ (27)</option>
-<option uf="RN" class="optUF" value="11">RN (2)</option>
-<option uf="RO" class="optUF" value="1">RO (1)</option>
-<option uf="RS" class="optUF" value="23">RS (8)</option>
-<option uf="SC" class="optUF" value="22">SC (4)</option>
-<option uf="SE" class="optUF" value="15">SE (6)</option>
-<option selected="" uf="SP" class="optUF" value="20">SP (49)</option>
-</select>"""
     amazonas_opt = '<select class="form-control" id="LoteCidade"><option value="0" nome=""> Todas as Cidades </option><option value="114" nome="manacapuru">Manacapuru (1)</option><option value="127" nome="manaus">Manaus (1)</option></select>'
     bahia_opt = '<select class="form-control" id="LoteCidade"><option value="0" nome=""> Todas as Cidades </option><option value="1776" nome="barreiras">Barreiras (1)</option><option value="3865" nome="camacari">Camaçari (2)</option><option value="3489" nome="iacu">Iaçu (1)</option><option value="3810" nome="salvador">Salvador (1)</option><option value="3301" nome="vitoria-da-conquista">Vitória da Conquista (1)</option></select>'
     ceara_opt = '<select class="form-control" id="LoteCidade"><option value="0" nome=""> Todas as Cidades </option><option value="3905" nome="aquiraz">Aquiraz (1)</option><option value="3886" nome="fortaleza">Fortaleza (3)</option><option value="3776" nome="penaforte">Penaforte (1)</option></select>'
@@ -54,27 +32,31 @@ class BiasleiloesSpider(scrapy.Spider):
     sergipe_opt = '<select class="form-control" id="LoteCidade"><option value="0" nome=""> Todas as Cidades </option><option value="4145" nome="capela">Capela (2)</option><option value="3925" nome="tobias-barreto">Tobias Barreto (4)</option></select>'
     sp_opt = '<select class="form-control" id="LoteCidade"><option value="0" nome=""> Todas as Cidades </option><option value="5613" nome="assis">Assis (2)</option><option value="1592" nome="braganca-paulista">Bragança Paulista (1)</option><option value="1845" nome="campos-do-jordao">Campos do Jordão (1)</option><option value="1520" nome="itapecerica-da-serra">Itapecerica da Serra (1)</option><option value="1536" nome="itatiba">Itatiba (1)</option><option value="1728" nome="jacarei">Jacareí (1)</option><option value="1079" nome="jau">Jaú (1)</option><option value="1506" nome="jundiai">Jundiaí (1)</option><option value="1600" nome="mairipora">Mairiporã (1)</option><option value="778" nome="mirassol">Mirassol (4)</option><option value="1233" nome="piracicaba">Piracicaba (1)</option><option value="1611" nome="praia-grande">Praia Grande (3)</option><option value="1274" nome="ribeirao-preto">Ribeirão Preto (7)</option><option value="1379" nome="santa-barbara-d\'oeste">Santa Bárbara D\'Oeste (1)</option><option value="1661" nome="santos">Santos (2)</option><option value="1601" nome="sao-bernardo-do-campo">São Bernardo do Campo (1)</option><option value="837" nome="sao-jose-do-rio-preto">São José do Rio Preto (5)</option><option value="1554" nome="sao-paulo">São Paulo (12)</option><option value="1357" nome="sorocaba">Sorocaba (1)</option><option value="5770" nome="votuporanga">Votuporanga (1)</option></select>'
 
-    states_id = {'amazonas': 'am', 'bahia': 'ba', 'ceara': 'ce', 'espirito_santo': 'es', 'goias': 'go', 'maranhao': 'ma', 'mato_grosso': 'mt', 'mato_grosso_do_sul': 'ms', 'minas_gerais': 'mg', 'parana': 'pr', 'paraiba': 'pb', 'para': 'pa', 'pernambuco': 'pe', 'piaui': 'pi', 'rio_grande_do_norte': 'rn', 'rio_grande_do_sul': 'rs', 'rondonia': 'rn','roraima': 'ro','rio_de_janeiro': 'rj', 'santa_catarina': 'sc', 'sergipe': 'se', 'sao_paulo': 'sp', 'tocantins': 'to'}
-    amazonas_cities_id = parser.parse_select_dict(raw_select=amazonas_opt,exclude_first_option=True)
-    bahia_cities_id = parser.parse_select_dict(raw_select=bahia_opt,exclude_first_option=True)
-    ceara_cities_id = parser.parse_select_dict(raw_select=ceara_opt,exclude_first_option=True)
-    goias_cities_id = parser.parse_select_dict(raw_select=goias_opt,exclude_first_option=True)
-    maranhao_cities_id = parser.parse_select_dict(raw_select=maranhao_opt,exclude_first_option=True)
-    mg_cities_id = parser.parse_select_dict(raw_select=mg_opt,exclude_first_option=True)
-    mgs_cities_id = parser.parse_select_dict(raw_select=mgs_opt,exclude_first_option=True)
-    minas_gerais_cities_id = parser.parse_select_dict(raw_select=minas_gerais_opt,exclude_first_option=True)
-    paraiba_cities_id = parser.parse_select_dict(raw_select=paraiba_opt,exclude_first_option=True)
-    parana_cities_id = parser.parse_select_dict(raw_select=parana_opt,exclude_first_option=True)
-    pernambuco_cities_id = parser.parse_select_dict(raw_select=pernambuco_opt,exclude_first_option=True)
-    piaui_cities_id = parser.parse_select_dict(raw_select=piaui_opt,exclude_first_option=True)
-    rj_cities_id = parser.parse_select_dict(raw_select=rj_opt,exclude_first_option=True)
-    rgn_cities_id = parser.parse_select_dict(raw_select=rgn_opt,exclude_first_option=True)
-    rgs_cities_id = parser.parse_select_dict(raw_select=rgs_opt,exclude_first_option=True)
-    rondonia_cities_id = parser.parse_select_dict(raw_select=rondonia_opt,exclude_first_option=True)
-    roraima_cities_id = parser.parse_select_dict(raw_select=roraima_opt,exclude_first_option=True)
-    sc_cities_id = parser.parse_select_dict(raw_select=sc_opt,exclude_first_option=True)
-    sp_cities_id = parser.parse_select_dict(raw_select=sp_opt,exclude_first_option=True)
-    sergipe_cities_id = parser.parse_select_dict(raw_select=sergipe_opt,exclude_first_option=True)
+    states_id = {'amazonas': 'am', 'bahia': 'ba', 'ceara': 'ce', 'espirito_santo': 'es', 'goias': 'go',
+                 'maranhao': 'ma', 'mato_grosso': 'mt', 'mato_grosso_do_sul': 'ms', 'minas_gerais': 'mg',
+                 'parana': 'pr', 'paraiba': 'pb', 'para': 'pa', 'pernambuco': 'pe', 'piaui': 'pi',
+                 'rio_grande_do_norte': 'rn', 'rio_grande_do_sul': 'rs', 'rondonia': 'rn', 'roraima': 'ro',
+                 'rio_de_janeiro': 'rj', 'santa_catarina': 'sc', 'sergipe': 'se', 'sao_paulo': 'sp', 'tocantins': 'to'}
+    amazonas_cities_id = parser.parse_select_dict(raw_select=amazonas_opt, exclude_first_option=True)
+    bahia_cities_id = parser.parse_select_dict(raw_select=bahia_opt, exclude_first_option=True)
+    ceara_cities_id = parser.parse_select_dict(raw_select=ceara_opt, exclude_first_option=True)
+    goias_cities_id = parser.parse_select_dict(raw_select=goias_opt, exclude_first_option=True)
+    maranhao_cities_id = parser.parse_select_dict(raw_select=maranhao_opt, exclude_first_option=True)
+    mg_cities_id = parser.parse_select_dict(raw_select=mg_opt, exclude_first_option=True)
+    mgs_cities_id = parser.parse_select_dict(raw_select=mgs_opt, exclude_first_option=True)
+    minas_gerais_cities_id = parser.parse_select_dict(raw_select=minas_gerais_opt, exclude_first_option=True)
+    paraiba_cities_id = parser.parse_select_dict(raw_select=paraiba_opt, exclude_first_option=True)
+    parana_cities_id = parser.parse_select_dict(raw_select=parana_opt, exclude_first_option=True)
+    pernambuco_cities_id = parser.parse_select_dict(raw_select=pernambuco_opt, exclude_first_option=True)
+    piaui_cities_id = parser.parse_select_dict(raw_select=piaui_opt, exclude_first_option=True)
+    rj_cities_id = parser.parse_select_dict(raw_select=rj_opt, exclude_first_option=True)
+    rgn_cities_id = parser.parse_select_dict(raw_select=rgn_opt, exclude_first_option=True)
+    rgs_cities_id = parser.parse_select_dict(raw_select=rgs_opt, exclude_first_option=True)
+    rondonia_cities_id = parser.parse_select_dict(raw_select=rondonia_opt, exclude_first_option=True)
+    roraima_cities_id = parser.parse_select_dict(raw_select=roraima_opt, exclude_first_option=True)
+    sc_cities_id = parser.parse_select_dict(raw_select=sc_opt, exclude_first_option=True)
+    sp_cities_id = parser.parse_select_dict(raw_select=sp_opt, exclude_first_option=True)
+    sergipe_cities_id = parser.parse_select_dict(raw_select=sergipe_opt, exclude_first_option=True)
 
     states_city_for_each_state = {
         states_id['amazonas']: amazonas_cities_id,
@@ -112,7 +94,7 @@ class BiasleiloesSpider(scrapy.Spider):
                     before, _, _ = city.partition('_(')
                     if before == self.city:
                         data_bem_estado_id = state_id
-                        data_bem_cidade_id = before.replace('_','-')
+                        data_bem_cidade_id = before.replace('_', '-')
 
         if self.category == GTEnum.RESIDENTIAL:
             subclasse = 'residenciais'
@@ -123,24 +105,25 @@ class BiasleiloesSpider(scrapy.Spider):
         else:
             subclasse = 'todos-os-segmentos'
 
-
         token = response.xpath('//input[@name="__RequestVerificationToken"]/@value').get()
-
 
         url = f'https://www.biasileiloes.com.br/Sale/LotListSearch?categoria=&subcategoria=&term=&start=0&limit=20&listaId=&slug=&buscaImovel=true&estado={data_bem_estado_id}&bairro=todos-os-bairros&cidade={data_bem_cidade_id}&segmento={subclasse}&__RequestVerificationToken={token}'
 
         yield Request(url=url, callback=self.parse_response)
 
-    def parse_response(self,response):
+    def parse_response(self, response):
         item = AuctionsItem()
         divs = response.xpath('//div[@class="thumbnail thumbnail-vitrine-lot item-bid "]').extract()
         for div in divs:
             item['site'] = 'Bias Leilões'
 
-            item['price'] = self.parser.get_single_value_from_string(raw_string=div,xpath='//span[@class="price-line"]/text()')
+            item['price'] = self.parser.get_single_value_from_string(raw_string=div,
+                                                                     xpath='//span[@class="price-line"]/text()')
 
-            item['url'] = 'https://www.biasileiloes.com.br/' + self.parser.get_single_value_from_string(raw_string=div,xpath='//a/@href')
+            item['url'] = 'https://www.biasileiloes.com.br/' + self.parser.get_single_value_from_string(raw_string=div,
+                                                                                                        xpath='//a/@href')
 
-            item['description'] = self.parser.get_single_value_from_string(raw_string=div,xpath='//div[@class="photo-text"]/span/text()')
+            item['description'] = self.parser.get_single_value_from_string(raw_string=div,
+                                                                           xpath='//div[@class="photo-text"]/span/text()')
 
             yield item
