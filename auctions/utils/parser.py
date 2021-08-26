@@ -110,23 +110,21 @@ class Parser:
     def parse_category_based_on_description(self, description):
         under_description = description.lower()
         if 'apartamento' in under_description:
-            category = 'Apartamento'
+            return 'Apartamento'
         elif 'casa' in under_description:
-            category = 'Casa'
+            return 'Casa'
         elif 'residencial' in under_description:
-            category = 'Residencial'
+            return 'Residencial'
         elif 'comercial' in under_description:
-            category = 'Comercial'
+            return 'Comercial'
         elif 'chácara' in  under_description or 'chacara' in under_description:
-            category = 'Chácara'
+            return 'Chácara'
         elif 'rural' in under_description:
-            category = 'Rural'
+            return 'Rural'
         elif 'terreno' in under_description:
-            category = 'Terreno'
+            return 'Terreno'
         else:
-            category = 'Não Identificado'
-
-        return category
+            return 'Não Identificado'
 
     def check_if_is_house(self, description: str):
         under_description = description.lower()
