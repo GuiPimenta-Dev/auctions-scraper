@@ -73,3 +73,9 @@ class Parser:
                 .encode('ASCII', 'ignore')
                 .decode('ASCII')
         )
+
+    def check_if_is_house(self, description: str):
+        under_description = description.lower()
+        if 'apartamento' in under_description or 'casa' in under_description or 'comercial' in under_description or 'residencial' in under_description or 'rural' in under_description or 'terreno' in under_description:
+            return True
+

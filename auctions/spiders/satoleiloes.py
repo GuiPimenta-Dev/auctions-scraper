@@ -28,8 +28,7 @@ class SatoleiloesSpider(scrapy.Spider):
         for div in divs:
             description = self.parser.get_single_value_from_string(raw_string=div,
                                                                    xpath='//div[@class="c-lote-descricao"]//a/text()')
-            under_description = description.lower()
-            if 'apartamento' in under_description or 'casa' in under_description or 'comercial' in under_description or 'residencial' in under_description or 'rural' in under_description or 'terreno' in under_description:
+            if self.parser.check_if_is_house(description):
                 item['site'] = 'Sato Leilões'
 
                 item['price'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//big/text()')
