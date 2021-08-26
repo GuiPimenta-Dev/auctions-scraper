@@ -49,6 +49,12 @@ class Parser:
 
         return opt
 
+    def parse_biasleiloes_select(self, raw_select, exclude_first_option):
+        parsed_select = {}
+        selects = self.parse_select_dict(raw_select, exclude_first_option=exclude_first_option)
+        for select in selects:
+            print(select)
+        pass
 
     def parse_select_dict_without_values(self, raw_select: str):
         opt = []
