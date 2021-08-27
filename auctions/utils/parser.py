@@ -121,6 +121,8 @@ class Parser:
             return 'Rural'
         elif 'barracão' in under_description or 'barracao' in under_description:
             return 'Barracão'
+        elif 'galpão' in under_description or 'galpao' in under_description:
+            return 'Galpão'
         elif 'residencial' in under_description:
             return 'Residencial'
         elif 'comercial' in under_description:
@@ -131,8 +133,6 @@ class Parser:
             return 'Prédio'
         elif 'loja' in under_description:
             return 'Loja'
-        elif 'galpão' in under_description or 'galpao' in under_description:
-            return 'Galpão'
         elif 'terreno' in under_description:
             return 'Terreno'
         elif 'lote' in under_description:
