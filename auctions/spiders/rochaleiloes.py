@@ -18,18 +18,23 @@ class RochaleiloesSpider(scrapy.Spider):
         item = AuctionsItem()
         divs = response.xpath('//div[@class="listing-item rocha-listing-lote"]').extract()
         for div in divs:
-            item['site'] = 'Rocha Leilões'
-
-            price = self.parser.get_multiple_values_from_string(raw_string=div,
-                                                                xpath='//ul[@class="listing-details-valores"]//li')
-            _, dollar_sign, price = self.parser.clean_html_tags_from_string(price).partition('R$')
-            item['price'] = dollar_sign + price
-
-            item['url'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//a/@href')
-
             description = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//p/text()')
-            item['description'] = description
+            if self.parser.check_if_is_house(description):
+                item['site'] = 'Rocha Leilões'
 
-            item['category'] = self.parser.parse_category_based_on_description(description)
+                price = self.parser.get_multiple_values_from_string(raw_string=div,
+                                                                    xpath='//ul[@class="listing-details-valores"]//li')
+                _, dollar_sign, price = self.parser.clean_html_tags_from_string(price).partition('R$')
+                try:
+                    price = price.strip().split(' ')[0]
+                except:
+                    pass
+                item['price'] = dollar_sign + price
 
-            yield item
+                item['url'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//a/@href')
+
+                item['description'] = description
+
+                item['category'] = self.parser.parse_category_based_on_description(description)
+
+                yield item
