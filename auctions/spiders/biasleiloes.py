@@ -3,7 +3,6 @@ from scrapy import Request
 
 from ..items import AuctionsItem
 from ..utils.parser import Parser
-from ..constants.constants import GroundTypeEnum as GTEnum
 
 
 class BiasleiloesSpider(scrapy.Spider):
