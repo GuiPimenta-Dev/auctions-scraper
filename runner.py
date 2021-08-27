@@ -4,6 +4,7 @@ from threading import *
 import os
 import glob
 import csv
+import pandas as pd
 from xlsxwriter.workbook import Workbook
 
 
@@ -19,7 +20,7 @@ class App(Thread):
 
 
 if __name__ == '__main__':
-    city = 'niteroi'
+    city = 'sao_paulo'
     result_csv = city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
 
     app1 = App(spider='amleiloeiro', city=city, result_csv=result_csv)
@@ -95,11 +96,7 @@ if __name__ == '__main__':
     app22.join()
     app23.join()
 
-    workbook = Workbook(f'{result_csv}' + '.xlsx')
-    worksheet = workbook.add_worksheet()
-    with open(f'./{result_csv}.csv', 'rt', encoding='utf8') as f:
-        reader = csv.reader(f)
-        for r, row in enumerate(reader):
-            for c, col in enumerate(row):
-                worksheet.write(r, c, col)
-    workbook.close()
+    read_file = pd.read_csv(f'./{result_csv}.csv')
+    read_file.to_excel(f'./{result_csv}.xlsx', index=None, header=['Site', 'Categoria', 'Preço', 'Url', 'Descrição'])
+    os.system(f"start EXCEL.EXE ./{result_csv}.xlsx")
+
