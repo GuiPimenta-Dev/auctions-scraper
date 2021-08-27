@@ -135,6 +135,8 @@ class Parser:
             return 'Prédio'
         elif 'loja' in under_description:
             return 'Loja'
+        elif 'galpão' in under_description or 'galpao' in under_description:
+            return 'Galpão'
         elif 'terreno' in under_description:
             return 'Terreno'
         elif 'lote' in under_description:
