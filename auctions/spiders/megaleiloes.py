@@ -76,8 +76,6 @@ class MegaleiloesSpider(scrapy.Spider):
     sp_cities_id = parser.parse_select_dict(raw_select=sp_opt)
     tocantins_cities_id = parser.parse_select_dict(raw_select=tocantins_opt)
 
-    # {'acre': '1', 'alagoas': '2', 'amapa': '4', 'amazonas': '3', 'bahia': '5', 'ceara': '6', 'distrito_federal': '7', 'espirito_santo': '8', 'goias': '9', 'maranhao': '10', 'mato_grosso': '13', 'mato_grosso_do_sul': '12', 'minas_gerais': '11', 'para': '14', 'paraiba': '15', 'parana': '18', 'pernambuco': '16', 'piaui': '17', 'rio_de_janeiro': '19', 'rio_grande_do_norte': '20', 'rio_grande_do_sul': '23', 'rondonia': '21', 'roraima': '22', 'santa_catarina': '24', 'sao_paulo': '26', 'sergipe': '25', 'tocantins': '27'}
-
     states_city_for_each_state = {
         states_id['amazonas']: amazonas_cities_id,
         states_id['bahia']: bahia_cities_id,
@@ -102,15 +100,9 @@ class MegaleiloesSpider(scrapy.Spider):
         states_id['tocantins']: tocantins_cities_id,
     }
 
-    def __init__(self, city, category):
+    def __init__(self, city):
 
         base_url = 'https://www.megaleiloes.com.br/imoveis/'
-        if category == GTEnum.RESIDENTIAL:
-            base_url += 'casas'
-        elif category == GTEnum.RURAL:
-            base_url += 'imoveis-rurais'
-        elif category == GTEnum.COMMERCIAL:
-            base_url += 'imoveis-comerciais'
 
         if city in self.states_id:
             self.start_urls = [f'{base_url}/{self.states_id[city]}']
@@ -119,8 +111,6 @@ class MegaleiloesSpider(scrapy.Spider):
                 for city_key, city_value in state_cities.items():
                     if city_key == city:
                         self.start_urls = [f'{base_url}/{state_id}/{city_value}']
-
-        # self.start_urls = ['http://www.megaleiloes.com.br/']
 
     def parse(self, response):
         item = AuctionsItem()
@@ -140,6 +130,9 @@ class MegaleiloesSpider(scrapy.Spider):
     def parse_description(self, response, **kwargs):
         item = kwargs
 
-        item['description'] = response.xpath('//div[@class="content"]/text()').get().strip()
+        description = response.xpath('//div[@class="content"]/text()').get().strip()
+        item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
 
         yield item

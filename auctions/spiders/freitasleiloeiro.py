@@ -41,14 +41,8 @@ class FreitasleiloeiroSpider(scrapy.Spider):
     }
 
     def __init__(self, city, category):
-        if category == GTEnum.RESIDENTIAL:
-            sub_category_param = '63'
-        elif category == GTEnum.RURAL:
-            sub_category_param = '126'
-        elif category == GTEnum.COMMERCIAL:
-            sub_category_param = '64'
-        else:
-            sub_category_param = ''
+
+        sub_category_param = ''
 
         if city in self.states_id:
             state_param = self.states_id[city]
@@ -79,6 +73,10 @@ class FreitasleiloeiroSpider(scrapy.Spider):
 
             description = self.parser.get_single_value_from_string(raw_string=tr,
                                                                                  xpath='//div[@class="text-justify;"]')
-            item['description'] = self.parser.clean_html_tags_from_string(description)
+
+            description = self.parser.clean_html_tags_from_string(description)
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item

@@ -7,11 +7,11 @@ from ..utils.parser import Parser
 class RochaleiloesSpider(scrapy.Spider):
     name = 'rochaleiloes'
     parser = Parser()
-    id_category = {GTEnum.ALL: '0', GTEnum.RESIDENTIAL: '2', GTEnum.RURAL: '4', GTEnum.COMMERCIAL: '10'}
+    id_category = '0'
     start_urls = ['http://rochaleiloes.com.br/']
 
     def parse(self, response):
-        url = f'https://rochaleiloes.com.br/busca?termos={self.city}&autos=&uf=0&cidade=&categoria={self.id_category[self.category]}&tipo=tudo&minimo=&maximo='
+        url = f'https://rochaleiloes.com.br/busca?termos={self.city}&autos=&uf=0&cidade=&categoria={self.id_category}&tipo=tudo&minimo=&maximo='
         yield scrapy.Request(url=url, callback=self.parse_response)
 
     def parse_response(self, response):
@@ -27,6 +27,9 @@ class RochaleiloesSpider(scrapy.Spider):
 
             item['url'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//a/@href')
 
-            item['description'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//p/text()')
+            description = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//p/text()')
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item

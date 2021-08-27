@@ -6,6 +6,7 @@ from ..utils.parser import Parser
 
 class SodresantoroSpider(scrapy.Spider):
     name = 'sodresantoro'
+    parser = Parser()
 
     def __init__(self, city):
         if city == 'sao_paulo':
@@ -41,6 +42,9 @@ class SodresantoroSpider(scrapy.Spider):
 
         item['price'] = response.xpath('//b[@class="lance"]/text()').get()
 
-        item['description'] = response.xpath('//h2[@class="titulo_1"]/text()').get()
+        description = response.xpath('//h2[@class="titulo_1"]/text()').get()
+        item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
 
         yield item

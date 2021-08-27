@@ -39,7 +39,9 @@ class KleiloesSpider(scrapy.Spider):
 
             city = self.parser.normalize_string(city)
             if city == self.city:
-                item['description'] = response.xpath('//span[@id="ctl00_ContentPlaceHolder1_DescricaoCompletaSublote"]/text()').get()
+                description = response.xpath('//span[@id="ctl00_ContentPlaceHolder1_DescricaoCompletaSublote"]/text()').get()
+                item['description'] = description
 
+                item['category'] = self.parser.parse_category_based_on_description(description)
                 yield item
 

@@ -10,13 +10,17 @@ class TopoleiloesSpider(scrapy.Spider):
                 'irati': '4063', 'jataizinho': '4086', 'pinhais': '4175', 'ponta_grossa': '4185',
                 'sao_jose_dos_pinhais': '4260',
                 'porto_alegre': '4927', 'blumenau': '4346'}
-    categorys_id = {GTEnum.ALL: '0', GTEnum.RESIDENTIAL: '6', GTEnum.COMMERCIAL: '3', GTEnum.RURAL: '5'}
     parser = Parser()
 
-    def __init__(self, city, category):
+    def __init__(self, city):
         if city in self.citys_id:
             self.start_urls = [
-                f'https://topoleiloes.com.br/busca?cidade={self.citys_id[city]}&categoria={self.categorys_id[category]}']
+                f'https://topoleiloes.com.br/busca?cidade={self.citys_id[city]}&categoria=3',
+                f'https://topoleiloes.com.br/busca?cidade={self.citys_id[city]}&categoria=4',
+                f'https://topoleiloes.com.br/busca?cidade={self.citys_id[city]}&categoria=5',
+                f'https://topoleiloes.com.br/busca?cidade={self.citys_id[city]}&categoria=6',
+                f'https://topoleiloes.com.br/busca?cidade={self.citys_id[city]}&categoria=12',
+            ]
 
     def parse(self, response):
         item = AuctionsItem()
@@ -42,4 +46,7 @@ class TopoleiloesSpider(scrapy.Spider):
                                                                   xpath='//p[@class="MsoNormal"]//span/text()').strip()
 
         item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
+
         yield item

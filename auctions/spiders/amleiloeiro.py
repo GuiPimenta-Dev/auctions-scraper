@@ -113,20 +113,30 @@ class AmleiloeiroSpider(scrapy.Spider):
                         data_bem_estado_id = state_id
                         data_bem_cidade_id = city_id
 
-        if data_bem_estado_id is None and data_bem_cidade_id is None:
-            return
-
-        if self.category in [GTEnum.RESIDENTIAL, GTEnum.ALL]:
-            data_bem_categoria_id = "218"
-        elif self.category == GTEnum.RURAL:
-            data_bem_categoria_id = "222"
-        elif self.category == GTEnum.COMMERCIAL:
-            data_bem_categoria_id = '256'
-
         data = {
             'data[Bem][estado_id]': data_bem_estado_id,
             'data[Bem][cidade_id]': data_bem_cidade_id,
-            'data[Bem][categoria_id][]': data_bem_categoria_id,
+            'data[Bem][categoria_id][]': [
+                "218",
+                "219",
+                "220",
+                "257",
+                "258",
+                "259",
+                "260",
+                "262",
+                "263",
+                "222",
+                "223",
+                "224",
+                "261",
+                "226",
+                "256",
+                "269",
+                "271"
+            ],
+            # 'data[Bem][categoria_id][]': category,
+            'categoria': '0',
         }
 
         url = 'https://www.amleiloeiro.com.br/externo/bens/pesquisaAvancada'
@@ -151,6 +161,9 @@ class AmleiloeiroSpider(scrapy.Spider):
     def parse_description(self, response, **kwargs):
         item = kwargs
 
-        item['description'] = response.xpath('//p[@class="mb-3"]/text()').get()
+        description = response.xpath('//p[@class="mb-3"]/text()').get()
+        item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
 
         yield item

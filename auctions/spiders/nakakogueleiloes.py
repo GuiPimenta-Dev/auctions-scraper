@@ -33,7 +33,10 @@ class NakakogueleiloesSpider(scrapy.Spider):
             url = self.parser.get_single_value_from_string(raw_string=ul, xpath='//a[@class="botao"]/@href')
             item['url'] = 'https://www.nakakogueleiloes.com.br/' + url
 
-            item['description'] = self.parser.get_multiple_values_from_string(raw_string=ul, xpath='//h3[@class="titulo-lote"]/text()')
+            description = self.parser.get_multiple_values_from_string(raw_string=ul, xpath='//h3[@class="titulo-lote"]/text()')
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item
 

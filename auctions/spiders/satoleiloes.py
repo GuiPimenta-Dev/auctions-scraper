@@ -38,6 +38,8 @@ class SatoleiloesSpider(scrapy.Spider):
 
                 item['description'] = description
 
+                item['category'] = self.parser.parse_category_based_on_description(description)
+
                 yield item
 
         next = response.xpath('//a[@rel="next"]/@href').get()

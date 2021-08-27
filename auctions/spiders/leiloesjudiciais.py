@@ -114,20 +114,21 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
                         data_bem_estado_id = state_id
                         data_bem_cidade_id = city_id
 
-        if data_bem_estado_id is None and data_bem_cidade_id is None:
-            return
-
-        if self.category in [GTEnum.RESIDENTIAL, GTEnum.ALL]:
-            data_bem_categoria_id = "11"
-        elif self.category == GTEnum.RURAL:
-            data_bem_categoria_id = "13"
-        elif self.category == GTEnum.COMMERCIAL:
-            data_bem_categoria_id = '8'
-
         data = {
             'data[Bem][estado_id]': data_bem_estado_id,
             'data[Bem][cidade_id]': data_bem_cidade_id,
-            'data[Bem][categoria_id][]': data_bem_categoria_id,
+            "data[Bem][categoria_id][]": [
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "33",
+                "13",
+                "14"
+            ],
+            'categoria': '0'
         }
 
         url = 'https://www.leiloesjudiciais.com.br/externo/bens/pesquisaAvancada'
@@ -145,7 +146,7 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
             url = self.parser.get_single_value_from_string(raw_string=div,
                                                            xpath='//div[@class="c-lote-descricao"]//a/@href')
 
-            item['url'] = urlQ
+            item['url'] = url
 
             item['description'] = self.parser.get_single_value_from_string(raw_string=div,
                                                                            xpath='//div[@class="c-lote-descricao"]//a/text()')
@@ -160,6 +161,9 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
     def parse_description(self, response, **kwargs):
         item = kwargs
 
-        item['description'] = response.xpath('//div[@id="l-lote-descricao"]/p/text()').get()
+        description = response.xpath('//div[@id="l-lote-descricao"]/p/text()').get()
+        item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
 
         yield item

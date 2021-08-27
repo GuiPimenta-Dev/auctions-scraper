@@ -109,20 +109,36 @@ class Parser:
 
     def parse_category_based_on_description(self, description):
         under_description = description.lower()
-        if 'apartamento' in under_description:
+        if 'apartamento' in under_description or 'apto' in under_description:
             return 'Apartamento'
-        elif 'casa' in under_description:
-            return 'Casa'
-        elif 'residencial' in under_description:
-            return 'Residencial'
-        elif 'comercial' in under_description:
-            return 'Comercial'
         elif 'chácara' in  under_description or 'chacara' in under_description:
             return 'Chácara'
+        elif 'fazenda' in under_description:
+            return 'Fazenda'
+        elif 'sítio' in under_description or 'sitio' in under_description:
+            return 'Sítio'
         elif 'rural' in under_description:
             return 'Rural'
+        elif 'barracão' in under_description or 'barracao' in under_description:
+            return 'Barracão'
+        elif 'residencial' in under_description:
+            return 'Residencial'
+        elif 'sala comercial' in under_description:
+            return 'Sala comercial'
+        elif 'prédio comercial' in under_description or ' predio comercial' in under_description:
+            return 'Prédio comercial'
+        elif 'comercial' in under_description:
+            return 'Comercial'
+        elif 'casa' in under_description:
+            return 'Casa'
+        elif 'prédio' in under_description or 'predio' in under_description:
+            return 'Prédio'
+        elif 'loja' in under_description:
+            return 'Loja'
         elif 'terreno' in under_description:
             return 'Terreno'
+        elif 'lote' in under_description:
+            return 'Lote'
         else:
             return 'Não Identificado'
 

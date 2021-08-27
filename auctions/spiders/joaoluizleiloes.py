@@ -22,6 +22,10 @@ class JoaoluizleiloesSpider(scrapy.Spider):
 
             item['url'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//a/@href')
 
-            item['description'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//h5/text()')
+
+            description = self.parser.get_single_value_from_string(raw_string=div, xpath='//h5/text()')
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item

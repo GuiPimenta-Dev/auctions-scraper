@@ -10,8 +10,7 @@ class KronbergleiloesSpider(scrapy.Spider):
     name = 'kronbergleiloes'
     parser = Parser()
     type_id = '10'
-    categorys_id = {GTEnum.ALL: '', GTEnum.RURAL: '52', GTEnum.RESIDENTIAL: '51',
-                  GTEnum.COMMERCIAL: '49'}
+
     citys_id = {'agudos_do_sul': '123', 'apiacas': '445', 'apucarana': '457', 'arapongas': '528', 'ararangua': '541',
                   'araucaria': '562', 'bandeirantes': '777', 'bituruna': '1036', 'bocaiuva_do_sul': '1096',
                   'cambe': '1521', 'campina_grande_do_sul': '1557', 'campo_largo': '1594', 'cascavel': '1890',
@@ -34,7 +33,7 @@ class KronbergleiloesSpider(scrapy.Spider):
     def parse(self, response):
         data = {
             "id_tipo_lote": self.type_id,
-            "id_subtipo": self.categorys_id[self.category],
+            "id_subtipo": '',
             "estado": '',
             "id_cidades": self.citys_id[self.city],
             'Ped': 'Pesquisar'
@@ -51,8 +50,14 @@ class KronbergleiloesSpider(scrapy.Spider):
         divs = response.xpath('//section[@class="infos"]').extract()
         for div in divs:
             item['site'] = 'Kronberg Leilões'
+
             item['price'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="linha-valor-leilao active"]//span/text()')
+
             item['url'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="linha-valor-leilao active"]//a/@href')
-            item['description'] = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="bid-details"]//a/text()')
+
+            description = self.parser.get_multiple_values_from_string(raw_string=div, xpath='//div[@class="bid-details"]//a/text()')
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item

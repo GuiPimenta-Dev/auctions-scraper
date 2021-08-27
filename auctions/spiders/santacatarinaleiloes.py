@@ -24,21 +24,9 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
     }
     site = 'santa catarina leiloes'
     parser = Parser()
-    inicial_urls = {GTEnum.COMMERCIAL: 'http://www.santacatarinaleiloes.com.br/lotes/index/id/18',
-                    GTEnum.RESIDENTIAL: 'http://www.santacatarinaleiloes.com.br/lotes/index/id/8',
-                    GTEnum.RURAL: 'http://www.santacatarinaleiloes.com.br/lotes/index/id/7'}
-
-    def __init__(self, category):
-        self.start_urls = []
-        if category == GTEnum.COMMERCIAL:
-            self.start_urls.append(self.inicial_urls[GTEnum.COMMERCIAL])
-        elif category == GTEnum.RESIDENTIAL:
-            self.start_urls.append(self.inicial_urls[GTEnum.RESIDENTIAL])
-        elif category == GTEnum.RURAL:
-            self.start_urls.append(self.inicial_urls[GTEnum.RURAL])
-        else:
-            for _, value in self.inicial_urls.items():
-                self.start_urls.append(value)
+    start_urls = ['http://www.santacatarinaleiloes.com.br/lotes/index/id/18',
+                  'http://www.santacatarinaleiloes.com.br/lotes/index/id/8',
+                  'http://www.santacatarinaleiloes.com.br/lotes/index/id/7']
 
     def parse(self, response):
 
@@ -57,7 +45,9 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
                 item['price'] = i.split('Valor.')[1].strip()
 
             elif 'Bens.' in i:
-                item['description'] = i.split('Bens.')[1].strip()
+                description = i.split('Bens.')[1].strip()
+                item['description'] = description
+                item['category'] = self.parser.parse_category_based_on_description(description)
 
         item['url'] = response.url
 

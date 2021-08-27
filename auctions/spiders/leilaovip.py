@@ -256,14 +256,8 @@ class LeilaovipSpider(scrapy.Spider):
                         estado = state_id
                         cidade = city_id
 
-        if self.category == GTEnum.RESIDENTIAL:
-            subclasse = '29'
-        elif self.category == GTEnum.COMMERCIAL:
-            subclasse = '63'
-        elif self.category == GTEnum.RURAL:
-            subclasse = '33'
-        else:
-            subclasse = ''
+
+        subclasse = ''
 
         url = f'https://www.leilaovip.com.br/pesquisa?&estado={estado}&cidade={cidade}&subclasse={subclasse}'
 
@@ -293,6 +287,9 @@ class LeilaovipSpider(scrapy.Spider):
     def parse_description(self, response, **kwargs):
         item = kwargs
 
-        item['description'] = self.parser.get_multiple_values_from_string(raw_string=response.text, xpath='//span[@id="Holder_lblDescricao"]/text()')
+        description = self.parser.get_multiple_values_from_string(raw_string=response.text, xpath='//span[@id="Holder_lblDescricao"]/text()')
+        item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
 
         yield item

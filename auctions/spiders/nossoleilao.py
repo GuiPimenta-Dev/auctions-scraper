@@ -20,7 +20,10 @@ class NossoleilaoSpider(scrapy.Spider):
             item['url'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//a/@href')
 
             description = self.parser.get_single_value_from_string(raw_string=div, xpath='//div[@style="text-align: justify !important;"]')
-            item['description'] = self.parser.clean_html_tags_from_string(description)
+            description = self.parser.clean_html_tags_from_string(description)
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item
 

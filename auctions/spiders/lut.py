@@ -30,7 +30,10 @@ class LutSpider(scrapy.Spider):
     def parse_description(self, response, **kwargs):
         item = kwargs
 
-        item['description'] = response.xpath('//div[@class="info-content"]/p/text()').get().strip()
+        description = response.xpath('//div[@class="info-content"]/p/text()').get().strip()
+        item['description'] = description
+
+        item['category'] = self.parser.parse_category_based_on_description(description)
 
         yield item
 

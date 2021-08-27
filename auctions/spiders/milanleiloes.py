@@ -123,6 +123,9 @@ class MilanleiloesSpider(scrapy.Spider):
                 item['url'] = url
 
                 description = self.parser.get_single_value_from_string(raw_string=tr, xpath='//td[2]')
-                item['description'] = self.parser.clean_html_tags_from_string(description)
+                description = self.parser.clean_html_tags_from_string(description)
+                item['description'] = description
+
+                item['category'] = self.parser.parse_category_based_on_description(description)
 
                 yield item

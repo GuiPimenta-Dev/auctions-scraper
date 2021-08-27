@@ -96,14 +96,8 @@ class BiasleiloesSpider(scrapy.Spider):
                         data_bem_estado_id = state_id
                         data_bem_cidade_id = before.replace('_', '-')
 
-        if self.category == GTEnum.RESIDENTIAL:
-            subclasse = 'residenciais'
-        elif self.category == GTEnum.COMMERCIAL:
-            subclasse = 'comerciais'
-        elif self.category == GTEnum.RURAL:
-            subclasse = 'terrenos'
-        else:
-            subclasse = 'todos-os-segmentos'
+
+        subclasse = 'todos-os-segmentos'
 
         token = response.xpath('//input[@name="__RequestVerificationToken"]/@value').get()
 
@@ -123,7 +117,11 @@ class BiasleiloesSpider(scrapy.Spider):
             item['url'] = 'https://www.biasileiloes.com.br/' + self.parser.get_single_value_from_string(raw_string=div,
                                                                                                         xpath='//a/@href')
 
-            item['description'] = self.parser.get_single_value_from_string(raw_string=div,
+            description = self.parser.get_single_value_from_string(raw_string=div,
                                                                            xpath='//div[@class="photo-text"]/span/text()')
+
+            item['description'] = description
+
+            item['category'] = self.parser.parse_category_based_on_description(description)
 
             yield item
