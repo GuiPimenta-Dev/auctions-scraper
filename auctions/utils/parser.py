@@ -65,7 +65,7 @@ class Parser:
             if select:
                 _, _, after_value = select.partition(f'{split_value}="')
                 value = after_value.split('"')[0]
-                key,_,_ = select.partition(f'{split_key}')
+                key, _, _ = select.partition(f'{split_key}')
                 key = key.split('>')[-1]
 
                 try:
@@ -79,7 +79,6 @@ class Parser:
         except:
             pass
         return opt
-
 
     def parse_select_dict_without_values(self, raw_select: str):
         opt = []
@@ -103,7 +102,7 @@ class Parser:
         under_description = description.lower()
         if 'apartamento' in under_description or 'apto' in under_description:
             return 'Apartamento'
-        elif 'chácara' in  under_description or 'chacara' in under_description:
+        elif 'chácara' in under_description or 'chacara' in under_description:
             return 'Chácara'
         elif 'fazenda' in under_description:
             return 'Fazenda'
@@ -134,5 +133,33 @@ class Parser:
 
     def check_if_is_house(self, description: str):
         under_description = description.lower()
-        if 'apartamento' in under_description or 'casa' in under_description or 'comercial' in under_description or 'residencial' in under_description or 'rural' in under_description or 'terreno' in under_description:
+        if 'apartamento' in under_description or 'apto' in under_description:
             return True
+        elif 'chácara' in under_description or 'chacara' in under_description:
+            return True
+        elif 'fazenda' in under_description:
+            return True
+        elif 'sítio' in under_description or 'sitio' in under_description:
+            return True
+        elif 'rural' in under_description:
+            return True
+        elif 'barracão' in under_description or 'barracao' in under_description:
+            return True
+        elif 'galpão' in under_description or 'galpao' in under_description:
+            return True
+        elif 'residencial' in under_description:
+            return True
+        elif 'comercial' in under_description:
+            return True
+        elif 'casa' in under_description:
+            return True
+        elif 'prédio' in under_description or 'predio' in under_description:
+            return True
+        elif 'loja' in under_description:
+            return True
+        elif 'terreno' in under_description:
+            return True
+        elif 'lote' in under_description:
+            return True
+        else:
+            return False
