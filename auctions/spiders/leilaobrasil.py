@@ -44,7 +44,3 @@ class LeilaobrasilSpider(scrapy.Spider):
 
                 yield item
 
-        if self.page < 11:
-            self.page += 1
-            url = f'https://www.leilaobrasil.com.br/pagina/{self.page}'
-            yield response.follow(url=url, callback=self.parse_response)

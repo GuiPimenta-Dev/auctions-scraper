@@ -26,6 +26,10 @@ class LejeSpider(scrapy.Spider):
                                                                             xpath='//div[@class="col-lg-12 col-md-12 col-sm-12 col-xs-12 dvcsd-in dvcsd-active"]/text()').strip()
                     _, dollar_sign, price = price_div.partition('R$')
                     price = price.strip().split('\n')[0]
+                    try:
+                        price = price.split(' ')[0]
+                    except:
+                        pass
                     item['price'] = dollar_sign + ' ' + price
 
                     id = self.parser.get_multiple_values_from_string(raw_string=div,

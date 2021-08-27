@@ -40,7 +40,7 @@ class FreitasleiloeiroSpider(scrapy.Spider):
         states_id['sao_paulo']: sp_cities_id,
     }
 
-    def __init__(self, city, category):
+    def __init__(self, city):
 
         sub_category_param = ''
 
@@ -71,9 +71,8 @@ class FreitasleiloeiroSpider(scrapy.Spider):
             item['url'] = 'https://www.freitasleiloeiro.com.br' + self.parser.get_single_value_from_string(
                 raw_string=tr, xpath='//a/@href')
 
-            description = self.parser.get_single_value_from_string(raw_string=tr,
-                                                                                 xpath='//div[@class="text-justify;"]')
-
+            description = self.parser.get_multiple_values_from_string(raw_string=tr,
+                                                                      xpath='//div[@class="text-justify;"]/text()')
             description = self.parser.clean_html_tags_from_string(description)
             item['description'] = description
 

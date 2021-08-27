@@ -162,7 +162,7 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
         item = kwargs
 
         description = response.xpath('//div[@id="l-lote-descricao"]/p/text()').get()
-        item['description'] = description
+        item['description'] = description.strip().replace('\n', '').replace('\r', '').replace('\t','')
 
         item['category'] = self.parser.parse_category_based_on_description(description)
 

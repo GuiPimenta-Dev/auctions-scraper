@@ -31,13 +31,14 @@ class KronbergleiloesSpider(scrapy.Spider):
     start_urls = ['https://www.kronbergleiloes.com.br/']
 
     def parse(self, response):
-        data = {
-            "id_tipo_lote": self.type_id,
-            "id_subtipo": '',
-            "estado": '',
-            "id_cidades": self.citys_id[self.city],
-            'Ped': 'Pesquisar'
-        }
+        if self.city in self.citys_id:
+            data = {
+                "id_tipo_lote": self.type_id,
+                "id_subtipo": '',
+                "estado": '',
+                "id_cidades": self.citys_id[self.city],
+                'Ped': 'Pesquisar'
+            }
 
         url = 'https://www.kronbergleiloes.com.br/leilao/busca'
 

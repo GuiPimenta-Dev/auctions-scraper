@@ -78,6 +78,13 @@ ITEM_PIPELINES = {
 # Enable showing throttling stats for every response received:
 # AUTOTHROTTLE_DEBUG = False
 
+FEED_EXPORTERS = {
+    'csv': 'auctions.exporters.HeadlessCsvItemExporter',
+}
+
+FEED_EXPORT_FIELDS = ["site", "category", "price", "url", "description"]
+
+
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 # HTTPCACHE_ENABLED = True

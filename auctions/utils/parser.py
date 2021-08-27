@@ -7,10 +7,11 @@ class Parser:
 
     def get_multiple_values_from_string(self, raw_string: str, xpath: str):
         response = Selector(text=raw_string).xpath(xpath).extract()
-        return ' '.join(response)
+        return ' '.join(response).strip().replace('\n', '').replace('\r', '').replace('\t', '')
 
     def get_single_value_from_string(self, raw_string: str, xpath: str):
-        return Selector(text=raw_string).xpath(xpath).get()
+        return Selector(text=raw_string).xpath(xpath).get().strip().replace('\n', '').replace('\r', '').replace('\t',
+                                                                                                                '')
 
     def clean_html_tags_from_string(self, raw_string: str):
         cleanr = re.compile('<.*?>')
