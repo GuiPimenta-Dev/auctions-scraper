@@ -29,6 +29,7 @@ class RochaleiloesSpider(scrapy.Spider):
                     price = price.strip().split(' ')[0]
                 except:
                     pass
+
                 item['price'] = dollar_sign + price
 
                 item['url'] = self.parser.get_single_value_from_string(raw_string=div, xpath='//a/@href')
