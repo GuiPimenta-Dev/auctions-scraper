@@ -30,25 +30,26 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        item = AuctionsItem()
-        item['site'] = 'Santa Catarina leilões'
+        if self.city == 'santa_catarina':
+            item = AuctionsItem()
+            item['site'] = 'Santa Catarina leilões'
 
-        res = response.xpath('//div[@class="ds_itens_lote_ds"]').extract_first()
-        try:
-            res = BeautifulSoup(res,
-                                features="lxml").get_text().strip().split('\n')
-        except:
-            return
+            res = response.xpath('//div[@class="ds_itens_lote_ds"]').extract_first()
+            try:
+                res = BeautifulSoup(res,
+                                    features="lxml").get_text().strip().split('\n')
+            except:
+                return
 
-        for i in res:
-            if 'Valor.' in i:
-                item['price'] = i.split('Valor.')[1].strip()
+            for i in res:
+                if 'Valor.' in i:
+                    item['price'] = i.split('Valor.')[1].strip()
 
-            elif 'Bens.' in i:
-                description = i.split('Bens.')[1].strip()
-                item['description'] = description
-                item['category'] = self.parser.parse_category_based_on_description(description)
+                elif 'Bens.' in i:
+                    description = i.split('Bens.')[1].strip()
+                    item['description'] = description
+                    item['category'] = self.parser.parse_category_based_on_description(description)
 
-        item['url'] = response.url
+            item['url'] = response.url
 
-        yield item
+            yield item
