@@ -1,7 +1,7 @@
 import scrapy
+
 from ..items import AuctionsItem
 from ..utils.parser import Parser
-import re
 
 
 class LancenoleilaoSpider(scrapy.Spider):
