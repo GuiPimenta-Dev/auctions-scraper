@@ -20,7 +20,7 @@ class App(Thread):
 
 
 if __name__ == '__main__':
-    city = input('Informe o nome do local que deseja buscar: ')
+    city = 'sao_paulo'
     result_csv = city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
 
     app1 = App(spider='amleiloeiro', city=city, result_csv=result_csv)

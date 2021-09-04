@@ -101,40 +101,86 @@ class Parser:
 
     def parse_category_based_on_description(self, description):
         under_description = description.lower()
-        if 'apartamento' in under_description or 'apto' in under_description:
-            return 'Apartamento'
+        if 'flat' in under_description:
+            return 'Flat'
+        elif 'studio' in under_description:
+            return 'Studio'
+        elif 'kitinete' in under_description or 'conjugado' in under_description:
+            return 'Kitinete'
+        elif 'créditos imobiliários' in under_description:
+            return 'Créditos imobiliários'
+        elif 'massa falida' in under_description:
+            return 'Massa Falida'
+        elif 'sobrado' in under_description:
+            return 'Sobrado'
         elif 'chácara' in under_description or 'chacara' in under_description:
             return 'Chácara'
         elif 'fazenda' in under_description:
             return 'Fazenda'
         elif 'sítio' in under_description or 'sitio' in under_description:
             return 'Sítio'
-        elif 'rural' in under_description:
-            return 'Rural'
         elif 'barracão' in under_description or 'barracao' in under_description:
             return 'Barracão'
         elif 'galpão' in under_description or 'galpao' in under_description:
             return 'Galpão'
-        elif 'residencial' in under_description:
-            return 'Residencial'
-        elif 'comercial' in under_description:
-            return 'Comercial'
-        elif 'casa' in under_description:
-            return 'Casa'
-        elif 'prédio' in under_description or 'predio' in under_description:
-            return 'Prédio'
+        elif 'depósito' in under_description:
+            return 'Depósito'
+        elif 'sala' in under_description:
+            return 'Sala'
+        elif 'armazém' in under_description:
+            return 'Armazém'
+        elif 'box' in under_description:
+            return 'Box'
         elif 'loja' in under_description:
             return 'Loja'
-        elif 'terreno' in under_description:
+        elif 'duplex' in under_description:
+            return 'Duplex'
+        elif 'trilex' in under_description:
+            return 'Triplex'
+        elif 'sala comercial' in under_description:
+            return 'Sala comercial'
+        elif 'edifício comercial' in under_description or 'prédio comercial' in under_description:
+            return 'Edifício comercial'
+        elif 'edifício residencial' in under_description or 'prédio residencial' in under_description:
+            return 'Edifício residencial'
+        elif 'casa' in under_description:
+            return 'Casa'
+        elif 'apartamento' in under_description or 'apto' in under_description or 'ap.' in under_description:
+            return 'Apartamento'
+        elif 'condomínio' in under_description or 'cond.' in under_description:
+            return 'Condomínio'
+        elif 'garagem' in under_description:
+            return 'Garagem'
+        elif 'terreno' in under_description or 'terr.' in under_description:
             return 'Terreno'
         elif 'lote' in under_description:
             return 'Lote'
+        elif 'residencial' in under_description:
+            return 'residencial'
+        elif 'comercial' in under_description:
+            return 'comercial'
+        elif 'rural' in under_description:
+            return 'Rural'
+        elif 'prédio' in under_description or 'predio' in under_description or 'edifício' in under_description or 'edificação' in under_description:
+            return 'prédio'
+        elif 'imóvel' in under_description:
+            return 'Imóvel'
         else:
             return 'Não Identificado'
 
     def check_if_is_house(self, description: str):
         under_description = description.lower()
-        if 'apartamento' in under_description or 'apto' in under_description:
+        if 'flat' in under_description:
+            return True
+        elif 'studio' in under_description:
+            return True
+        elif 'kitinete' in under_description or 'conjugado' in under_description:
+            return True
+        elif 'créditos imobiliários' in under_description:
+            return True
+        elif 'massa falida' in under_description:
+            return True
+        elif 'sobrado' in under_description:
             return True
         elif 'chácara' in under_description or 'chacara' in under_description:
             return True
@@ -142,25 +188,52 @@ class Parser:
             return True
         elif 'sítio' in under_description or 'sitio' in under_description:
             return True
-        elif 'rural' in under_description:
-            return True
         elif 'barracão' in under_description or 'barracao' in under_description:
             return True
         elif 'galpão' in under_description or 'galpao' in under_description:
+            return True
+        elif 'depósito' in under_description:
+            return True
+        elif 'sala' in under_description:
+            return True
+        elif 'armazém' in under_description:
+            return True
+        elif 'box' in under_description:
+            return True
+        elif 'loja' in under_description:
+            return True
+        elif 'duplex' in under_description:
+            return True
+        elif 'trilex' in under_description:
+            return True
+        elif 'sala comercial' in under_description:
+            return True
+        elif 'edifício comercial' in under_description or 'prédio comercial' in under_description:
+            return True
+        elif 'edifício residencial' in under_description or 'prédio residencial' in under_description:
+            return True
+        elif 'casa' in under_description:
+            return True
+        elif 'apartamento' in under_description or 'apto' in under_description or 'ap.' in under_description:
+            return True
+        elif 'condomínio' in under_description or 'cond.' in under_description:
+            return True
+        elif 'garagem' in under_description:
+            return True
+        elif 'terreno' in under_description or 'terr.' in under_description:
+            return True
+        elif 'lote' in under_description:
             return True
         elif 'residencial' in under_description:
             return True
         elif 'comercial' in under_description:
             return True
-        elif 'casa' in under_description:
+        elif 'rural' in under_description:
             return True
-        elif 'prédio' in under_description or 'predio' in under_description:
+        elif 'prédio' in under_description or 'predio' in under_description or 'edifício' in under_description or 'edificação' in under_description:
             return True
-        elif 'loja' in under_description:
-            return True
-        elif 'terreno' in under_description:
-            return True
-        elif 'lote' in under_description:
+        elif 'imóvel' in under_description:
             return True
         else:
             return False
+
