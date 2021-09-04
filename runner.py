@@ -21,7 +21,7 @@ class App(Thread):
 
 if __name__ == '__main__':
     city = 'sao_paulo'
-    result_csv = city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
+    result_csv = 'output/' + city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
 
     app1 = App(spider='amleiloeiro', city=city, result_csv=result_csv)
     app2 = App(spider='biasleiloes', city=city, result_csv=result_csv)
