@@ -103,6 +103,10 @@ class Parser:
         under_description = description.lower()
         if 'flat' in under_description:
             return 'Flat'
+        elif 'duplex' in under_description:
+            return 'Duplex'
+        elif 'trilex' in under_description:
+            return 'Triplex'
         elif 'studio' in under_description:
             return 'Studio'
         elif 'kitinete' in under_description or 'conjugado' in under_description:
@@ -133,10 +137,6 @@ class Parser:
             return 'Box'
         elif 'loja' in under_description:
             return 'Loja'
-        elif 'duplex' in under_description:
-            return 'Duplex'
-        elif 'trilex' in under_description:
-            return 'Triplex'
         elif 'sala comercial' in under_description:
             return 'Sala comercial'
         elif 'edifício comercial' in under_description or 'prédio comercial' in under_description:
@@ -156,13 +156,13 @@ class Parser:
         elif 'lote' in under_description:
             return 'Lote'
         elif 'residencial' in under_description:
-            return 'residencial'
+            return 'Residencial'
         elif 'comercial' in under_description:
-            return 'comercial'
+            return 'Comercial'
         elif 'rural' in under_description:
             return 'Rural'
         elif 'prédio' in under_description or 'predio' in under_description or 'edifício' in under_description or 'edificação' in under_description:
-            return 'prédio'
+            return 'Prédio'
         elif 'imóvel' in under_description:
             return 'Imóvel'
         else:

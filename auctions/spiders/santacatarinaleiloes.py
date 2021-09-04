@@ -1,10 +1,7 @@
 import scrapy
-from bs4 import BeautifulSoup
-from scrapy.http import Response
 
 from ..items import AuctionsItem
 from ..utils.parser import Parser
-from ..constants.constants import GroundTypeEnum as GTEnum
 
 
 class SantacatarinaleiloesSpider(scrapy.Spider):
@@ -22,7 +19,7 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
         "Referer": "http://www.santacatarinaleiloes.com.br/",
         "Upgrade-Insecure-Requests": "1"
     }
-    site = 'santa catarina leiloes'
+    site = 'Santa Catarina Leiloes'
     parser = Parser()
     start_urls = ['http://www.santacatarinaleiloes.com.br/lotes/index/id/18',
                   'http://www.santacatarinaleiloes.com.br/lotes/index/id/8',
@@ -34,22 +31,20 @@ class SantacatarinaleiloesSpider(scrapy.Spider):
             item = AuctionsItem()
             item['site'] = 'Santa Catarina leilões'
 
-            res = response.xpath('//div[@class="ds_itens_lote_ds"]').extract_first()
-            try:
-                res = BeautifulSoup(res,
-                                    features="lxml").get_text().strip().split('\n')
-            except:
-                return
+            divs = response.xpath('//div[@class="ds_itens_lote_ds"]').extract()
 
-            for i in res:
-                if 'Valor.' in i:
-                    item['price'] = i.split('Valor.')[1].strip()
+            for major_div in divs:
+                for div in major_div.split('<strong>'):
+                    if 'Valor.' in div:
+                        price = div.split('Valor.')[1].strip()
+                        item['price'] = self.parser.clean_html_tags_from_string(price)
 
-                elif 'Bens.' in i:
-                    description = i.split('Bens.')[1].strip()
-                    item['description'] = description
-                    item['category'] = self.parser.parse_category_based_on_description(description)
+                    elif 'Bens.' in div:
+                        description = div.split('Bens.')[1].strip()
+                        description = self.parser.clean_html_tags_from_string(description)
+                        item['description'] = description
+                        item['category'] = self.parser.parse_category_based_on_description(description)
 
-            item['url'] = response.url
+                item['url'] = response.url
 
-            yield item
+                yield item

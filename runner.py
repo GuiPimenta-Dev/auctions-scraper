@@ -1,11 +1,7 @@
 import datetime
 import os
 from threading import *
-import os
-import glob
-import csv
 import pandas as pd
-from xlsxwriter.workbook import Workbook
 
 
 class App(Thread):
@@ -46,7 +42,6 @@ if __name__ == '__main__':
     app21 = App(spider='sodresantoro', city=city, result_csv=result_csv)
     app22 = App(spider='topoleiloes', city=city, result_csv=result_csv)
     app23 = App(spider='zukerman', city=city, result_csv=result_csv)
-
 
     app1.start()
     app2.start()
@@ -99,4 +94,3 @@ if __name__ == '__main__':
     read_file = pd.read_csv(f'./{result_csv}.csv')
     read_file.to_excel(f'./{result_csv}.xlsx', index=None, header=['Site', 'Categoria', 'Preço', 'Url', 'Descrição'])
     os.system(f"start EXCEL.EXE ./{result_csv}.xlsx")
-
