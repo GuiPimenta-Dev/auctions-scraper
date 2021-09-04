@@ -99,7 +99,8 @@ class Parser:
                 .decode('ASCII')
         )
 
-    def parse_category_based_on_description(self, description):
+    @staticmethod
+    def parse_category_based_on_description(description):
         under_description = description.lower()
         if 'flat' in under_description:
             return 'Flat'
@@ -168,7 +169,8 @@ class Parser:
         else:
             return 'Não Identificado'
 
-    def check_if_is_house(self, description: str):
+    @staticmethod
+    def check_if_is_house(description: str):
         under_description = description.lower()
         if 'flat' in under_description:
             return True
