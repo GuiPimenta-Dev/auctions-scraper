@@ -100,7 +100,7 @@ class Parser:
         )
 
     @staticmethod
-    def parse_category_based_on_description(description):
+    def parse_category_based_on_description(description):  # sourcery no-metrics
         under_description = description.lower()
         if 'flat' in under_description:
             return 'Flat'
@@ -130,8 +130,6 @@ class Parser:
             return 'Galpão'
         elif 'depósito' in under_description:
             return 'Depósito'
-        elif 'sala' in under_description:
-            return 'Sala'
         elif 'armazém' in under_description:
             return 'Armazém'
         elif 'box' in under_description:
@@ -170,7 +168,7 @@ class Parser:
             return 'Não Identificado'
 
     @staticmethod
-    def check_if_is_house(description: str):
+    def check_if_is_house(description: str):  # sourcery no-metrics
         under_description = description.lower()
         if 'flat' in under_description:
             return True
