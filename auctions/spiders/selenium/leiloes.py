@@ -10,7 +10,7 @@ class Leiloes(SeleniumSpider):
         self.csv_file = csv_file
         url = self.get_url(city)
         super().__init__(url)
-        time.sleep(5)
+        time.sleep(10)
         self.parse()
 
     def get_url(self, city):
