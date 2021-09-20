@@ -12,9 +12,11 @@ runner = Runner()
 def run_robots():
     state_city = request.args.get('state_city', '')
     try:
-        return runner.run_robots(state_city)
+        data = runner.run_robots(state_city)
     except:
-        return []
+        data =  []
+
+    return data
 
 
 if __name__ == '__main__':
