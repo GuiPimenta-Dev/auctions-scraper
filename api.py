@@ -14,7 +14,7 @@ def run_robots():
     try:
         data = runner.run_robots(state_city)
     except:
-        data =  []
+        data = []
 
     return data
 
