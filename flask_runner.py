@@ -97,4 +97,4 @@ class Runner:
         app22.join()
         app23.join()
         read_file = pd.read_csv(f'./{result_csv}.csv', names=['site', 'category', 'price', 'url', 'description'])
-        return json.loads(read_file.to_json(orient='table'))
+        return json.loads(read_file.to_json(orient='table', index=False))
