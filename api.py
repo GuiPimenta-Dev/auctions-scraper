@@ -11,7 +11,10 @@ runner = Runner()
 @app.route("/")
 def run_robots():
     state_city = request.args.get('state_city', '')
-    return runner.run_robots(state_city)
+    try:
+        return runner.run_robots(state_city)
+    except:
+        return []
 
 
 if __name__ == '__main__':
