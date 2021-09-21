@@ -57,7 +57,7 @@ class Runner:
         # app20 = App(spider='satoleiloes', city=city, result_csv=result_csv)
         # app21 = App(spider='sodresantoro', city=city, result_csv=result_csv)
         # app22 = App(spider='topoleiloes', city=city, result_csv=result_csv)
-        # app23 = App(spider='zukerman', city=city, result_csv=result_csv)
+        app23 = App(spider='zukerman', city=city, result_csv=result_csv)
 
         app1.run()
         # app2.run()
@@ -81,7 +81,7 @@ class Runner:
         # app20.run()
         # app21.run()
         # app22.run()
-        # app23.run()
+        app23.run()
 
 
         # app1.start()
