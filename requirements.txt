@@ -6,3 +6,4 @@ selenium
 gunicorn
 pandas
 openpyxl
+rq
