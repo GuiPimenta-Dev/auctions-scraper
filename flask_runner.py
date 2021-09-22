@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 from threading import *
 import pandas as pd
@@ -16,6 +17,18 @@ from auctions.utils.parser import Parser
 #
 #     def run(self):
 #         os.system(f'scrapy crawl {self.spider} -a city="{self.city}" -o {self.result_csv}.csv')
+
+class MyWorker():
+
+  def __init__(self, message):
+    self.message = message
+
+    thread = Thread(target=self.run, args=())
+    thread.daemon = True
+    thread.start()
+
+  def run(self):
+    logging.info(f'run MyWorker with parameter {self.message}')
 
 class App:
     def __init__(self, spider, city, result_csv):
@@ -36,51 +49,51 @@ class Runner:
         result_csv = 'output/' + city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
 
         app1 = App(spider='amleiloeiro', city=city, result_csv=result_csv)
-        # app2 = App(spider='biasleiloes', city=city, result_csv=result_csv)
-        # app3 = App(spider='freitasleiloeiro', city=city, result_csv=result_csv)
-        # app4 = App(spider='joaoluizleiloes', city=city, result_csv=result_csv)
-        # app5 = App(spider='kleiloes', city=city, result_csv=result_csv)
-        # app6 = App(spider='kronbergleiloes', city=city, result_csv=result_csv)
-        # app7 = App(spider='lancenoleilao', city=city, result_csv=result_csv)
-        # app8 = App(spider='leilaobrasil', city=city, result_csv=result_csv)
-        # app9 = App(spider='leilaovip', city=city, result_csv=result_csv)
-        # app10 = App(spider='leiloesjudiciais', city=city, result_csv=result_csv)
-        # app11 = App(spider='leje', city=city, result_csv=result_csv)
-        # app12 = App(spider='lut', city=city, result_csv=result_csv)
-        # app13 = App(spider='megaleiloes', city=city, result_csv=result_csv)
-        # app14 = App(spider='milanleiloes', city=city, result_csv=result_csv)
-        # app15 = App(spider='nakakogueleiloes', city=city, result_csv=result_csv)
-        # app16 = App(spider='nossoleilao', city=city, result_csv=result_csv)
-        # app17 = App(spider='psnleiloes', city=city, result_csv=result_csv)
-        # app18 = App(spider='rochaleiloes', city=city, result_csv=result_csv)
-        # app19 = App(spider='santacatarinaleiloes', city=city, result_csv=result_csv)
-        # app20 = App(spider='satoleiloes', city=city, result_csv=result_csv)
-        # app21 = App(spider='sodresantoro', city=city, result_csv=result_csv)
-        # app22 = App(spider='topoleiloes', city=city, result_csv=result_csv)
+        app2 = App(spider='biasleiloes', city=city, result_csv=result_csv)
+        app3 = App(spider='freitasleiloeiro', city=city, result_csv=result_csv)
+        app4 = App(spider='joaoluizleiloes', city=city, result_csv=result_csv)
+        app5 = App(spider='kleiloes', city=city, result_csv=result_csv)
+        app6 = App(spider='kronbergleiloes', city=city, result_csv=result_csv)
+        app7 = App(spider='lancenoleilao', city=city, result_csv=result_csv)
+        app8 = App(spider='leilaobrasil', city=city, result_csv=result_csv)
+        app9 = App(spider='leilaovip', city=city, result_csv=result_csv)
+        app10 = App(spider='leiloesjudiciais', city=city, result_csv=result_csv)
+        app11 = App(spider='leje', city=city, result_csv=result_csv)
+        app12 = App(spider='lut', city=city, result_csv=result_csv)
+        app13 = App(spider='megaleiloes', city=city, result_csv=result_csv)
+        app14 = App(spider='milanleiloes', city=city, result_csv=result_csv)
+        app15 = App(spider='nakakogueleiloes', city=city, result_csv=result_csv)
+        app16 = App(spider='nossoleilao', city=city, result_csv=result_csv)
+        app17 = App(spider='psnleiloes', city=city, result_csv=result_csv)
+        app18 = App(spider='rochaleiloes', city=city, result_csv=result_csv)
+        app19 = App(spider='santacatarinaleiloes', city=city, result_csv=result_csv)
+        app20 = App(spider='satoleiloes', city=city, result_csv=result_csv)
+        app21 = App(spider='sodresantoro', city=city, result_csv=result_csv)
+        app22 = App(spider='topoleiloes', city=city, result_csv=result_csv)
         app23 = App(spider='zukerman', city=city, result_csv=result_csv)
 
         app1.run()
-        # app2.run()
-        # app3.run()
-        # app4.run()
-        # app5.run()
-        # app6.run()
-        # app7.run()
-        # app8.run()
-        # app9.run()
-        # app10.run()
-        # app11.run()
-        # app12.run()
-        # app13.run()
-        # app14.run()
-        # app15.run()
-        # app16.run()
-        # app17.run()
-        # app18.run()
-        # app19.run()
-        # app20.run()
-        # app21.run()
-        # app22.run()
+        app2.run()
+        app3.run()
+        app4.run()
+        app5.run()
+        app6.run()
+        app7.run()
+        app8.run()
+        app9.run()
+        app10.run()
+        app11.run()
+        app12.run()
+        app13.run()
+        app14.run()
+        app15.run()
+        app16.run()
+        app17.run()
+        app18.run()
+        app19.run()
+        app20.run()
+        app21.run()
+        app22.run()
         app23.run()
 
 
