@@ -15,6 +15,7 @@ class CentralSul(SeleniumSpider):
 
     def parse(self):
         trs = self.driver.find_elements_by_xpath('//table//tr')
+
         site = 'CentralSul'
 
         price = '-'
