@@ -15,14 +15,14 @@ class CentralSul(SeleniumSpider):
 
     def parse(self):
         trs = self.driver.find_elements_by_xpath('//table//tr')
-        for tr in trs[1:]:
-            site = 'CentralSul'
+        site = 'CentralSul'
 
+        price = '-'
+
+        for tr in trs[1:]:
             description = tr.text.split('\n')[1]
 
             category = self.parser.parse_category_based_on_description(description=description)
-
-            price = '-'
 
             url = tr.find_element_by_xpath('//td//a').get_attribute('href')
 

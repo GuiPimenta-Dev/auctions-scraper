@@ -35,9 +35,9 @@ class Leiloes(SeleniumSpider):
 
     def parse(self):
         divs = self.driver.find_elements_by_xpath('//div[@class="card not-selectable"]//a')
-        for div in divs:
-            site = 'Leilões'
+        site = 'Leilões'
 
+        for div in divs:
             infos = div.text.split('\n')
 
             description = infos[1]
