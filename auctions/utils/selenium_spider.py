@@ -19,4 +19,4 @@ class SeleniumSpider(ABC):
     @staticmethod
     def write_csv(item, csv_file):
         with open(csv_file, 'a', encoding='utf-8') as f:
-            f.write(f'{item["site"]}, {item["category"]}, {item["price"]}, {item["url"]}, {item["description"]} \n')
+            f.write(f'{item["site"]},{item["category"]},{item["price"]},{item["url"]},{item["description"]}\n')

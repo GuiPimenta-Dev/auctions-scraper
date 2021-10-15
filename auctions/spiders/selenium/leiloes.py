@@ -61,6 +61,8 @@ class Leiloes(SeleniumSpider):
 
 
 if __name__ == '__main__':
-    city = sys.argv[1]
-    csv_file = sys.argv[2]
+    city = 'sao_paulo'
+    # city = sys.argv[1]
+    # csv_file = sys.argv[2]
+    csv_file = 'teste.csv'
     Leiloes(city, csv_file)

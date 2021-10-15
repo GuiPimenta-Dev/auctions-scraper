@@ -94,3 +94,33 @@ if __name__ == '__main__':
     read_file = pd.read_csv(f'./{result_csv}.csv')
     read_file.to_excel(f'./{result_csv}.xlsx', index=None, header=['Site', 'Categoria', 'Preço', 'Url', 'Descrição'])
     os.system(f"start EXCEL.EXE ./{result_csv}.xlsx")
+
+
+from flask import Flask, request
+from flask_cors import CORS
+import os
+from flask_runner import Runner
+
+app = Flask(__name__)
+#application = app
+CORS(app)
+runner = Runner()
+
+@app.route('/home')
+def home():
+    return 'Home'
+
+@app.route("/")
+def run_robots():
+    state_city = request.args.get('state_city', '')
+    try:
+        os.system('python py_run.py {state_city}')
+        # data = runner.run_robots(state_city)
+    except Exception as e:
+        data = e
+
+    return str(data)
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000, debug=False)
