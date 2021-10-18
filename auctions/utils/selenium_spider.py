@@ -7,7 +7,8 @@ from auctions.auctions.utils.parser import Parser
 class SeleniumSpider(ABC):
     def __init__(self, url):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        chrome_options.add_argument('disable-notifications')
+        # chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.get(url)
         self.parser = Parser()

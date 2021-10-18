@@ -172,6 +172,10 @@ class Parser:
         under_description = description.lower()
         if 'flat' in under_description:
             return True
+        elif 'duplex' in under_description:
+            return True
+        elif 'trilex' in under_description:
+            return True
         elif 'studio' in under_description:
             return True
         elif 'kitinete' in under_description or 'conjugado' in under_description:
@@ -194,17 +198,11 @@ class Parser:
             return True
         elif 'depósito' in under_description:
             return True
-        elif 'sala' in under_description:
-            return True
         elif 'armazém' in under_description:
             return True
         elif 'box' in under_description:
             return True
         elif 'loja' in under_description:
-            return True
-        elif 'duplex' in under_description:
-            return True
-        elif 'trilex' in under_description:
             return True
         elif 'sala comercial' in under_description:
             return True
