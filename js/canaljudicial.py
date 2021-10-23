@@ -1,8 +1,7 @@
 # coding=utf8
-import json
 import sys
+
 from base import BaseRequests
-import requests
 
 
 class CanalJudicial(BaseRequests):

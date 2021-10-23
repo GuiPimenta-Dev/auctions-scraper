@@ -3,61 +3,56 @@ import sys
 
 import requests
 
-from auctions.auctions.utils.parser import Parser
+from base import BaseRequests
 
 
-class Resale:
+class Resale(BaseRequests):
     def __init__(self, city, csv_file):
         self.csv_file = csv_file
         self.city = city.replace('_', '-').title()
-        houses = self.get_url(city)
+        self.headers = {"x-api-key": "TFqvYJxuhO67Bo5WOzspQ6UENhuIZFVvrhLIcCig"}
+
+        houses = self.get_response(city)
         self.parse(houses)
 
-    @staticmethod
-    def get_city_slug(chosen_city):
-        parser = Parser()
+    def get_response(self, city):
+        city = self.get_city_slug(city)
+        return self.get_cities(city)
+
+    def get_city_slug(self, chosen_city):
         url = "https://q3jhhgksa9.execute-api.us-east-2.amazonaws.com/prod/city"
 
-        payload = ""
-        headers = {"x-api-key": "TFqvYJxuhO67Bo5WOzspQ6UENhuIZFVvrhLIcCig"}
-        response = requests.request("GET", url, data=payload, headers=headers)
-        cities = json.loads(response.text)
+        cities = self.parse_json_response(url=url, headers=self.headers)
         for city in cities:
-            normalized_city = parser.normalize_string(city['name'])
+            normalized_city = self.normalize_string(city['name'])
             if normalized_city == chosen_city:
                 return city['slug']
 
-    @staticmethod
-    def get_cities(city):
-        import requests
-
+    def get_cities(self, city):
         url = "https://q3jhhgksa9.execute-api.us-east-2.amazonaws.com/prod/property"
 
         querystring = {"search": city, "valor-max": "70000000", "order": "data"}
 
-        payload = ""
-        headers = {"x-api-key": "TFqvYJxuhO67Bo5WOzspQ6UENhuIZFVvrhLIcCig"}
 
-        response = requests.request("GET", url, data=payload, headers=headers, params=querystring)
+        response = self.parse_json_response(url=url, query_params=querystring, headers=self.headers)
 
-        return json.loads(response.text)['data']
+        return response['data']
 
-    @staticmethod
-    def get_url(city):
-        city = Resale.get_city_slug(city)
-        return Resale.get_cities(city)
 
     def parse(self, houses):
         site = 'Resale'
         for house in houses:
             bedrooms = house['caracteristicas']['dormitorios']
             house_id = house['tags'][0]
-            description = house['descricao'].replace('\n', '').replace('\r', ' ')
+
+            description = self.clean_html_tags_from_string(house['descricao'].replace('.\xa0',''))
+
             category = house['tipo_imovel']
-            price = Resale.convert_currency(house['valores']['valor_venda'])
-            if '394.902,00' in price:
-                u = 1
+
+            price = self.convert_currency(house['valores']['valor_venda'])
+
             url = f'https://www.resale.com.br/imovel/{self.city}/{bedrooms}-Quartos/{house_id}'
+
             item = {
                 'site': site,
                 'category': category,
@@ -65,12 +60,14 @@ class Resale:
                 'url': url,
                 'description': description
             }
+
             with open(self.csv_file, 'a', encoding='utf-8') as f:
                 f.write(f'{item["site"]},{item["category"]},{item["price"]},{item["url"]},{item["description"]}\n')
 
 
-
 if __name__ == '__main__':
-    city = sys.argv[1]
-    csv_file = sys.argv[2]
+    # city = sys.argv[1]
+    city = 'curitiba'
+    # csv_file = sys.argv[2]
+    csv_file = 'teste.csv'
     Resale(city, csv_file)

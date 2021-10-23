@@ -7,14 +7,14 @@ from scrapy import Selector
 
 class BaseRequests(Parser):
     @staticmethod
-    def parse_json_response(url: str, query_params: dict = None):
-        response = requests.request("GET", url, params=query_params)
+    def parse_json_response(url: str, query_params: dict = None, headers: dict = None):
+        response = requests.request("GET", url, params=query_params, headers=headers)
 
         return json.loads(response.text)
 
     @staticmethod
-    def parse_html_response(url: str, query_params: dict = None):
-        response = requests.request("GET", url, params=query_params)
+    def parse_html_response(url: str, query_params: dict = None, headers: dict = None):
+        response = requests.request("GET", url, params=query_params, headers=headers)
         response = Selector(text=response.text)
 
         return response
