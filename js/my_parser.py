@@ -4,19 +4,27 @@ from unicodedata import normalize
 
 
 class Parser:
-    @staticmethod
-    def save_csv(csv_file: str, item: dict):
-        with open(csv_file, 'a', encoding='utf-8') as f:
-            f.write(f'{item["site"]},{item["category"]},{item["price"]},{item["url"]},{item["description"]}\n')
 
-    def clean_html_tags_from_string(self, raw_string: str):
+    @staticmethod
+    def convert_currency(amount):
+        thousands_separator = "."
+        currency = "R$ {:,.2f}".format(amount)
+        if thousands_separator == ".":
+            main_currency, fractional_currency = currency.split(".")[0], currency.split(".")[1]
+            new_main_currency = main_currency.replace(",", ".")
+            fractional_separator = ","
+            currency = new_main_currency + fractional_separator + fractional_currency
+
+        return currency
+
+    @staticmethod
+    def clean_html_tags_from_string(raw_string: str):
         cleanr = re.compile('<.*?>')
         return html.unescape(
             re.sub(cleanr, '', raw_string).strip().replace('\n', '').replace('\r', '').replace('\t', ''))
 
-
-
-    def normalize_string(self, raw_string):
+    @staticmethod
+    def normalize_string(raw_string):
         treated_string = raw_string.lower().replace(' ', '_').replace("'", '')
         return (
             normalize('NFKD', treated_string)

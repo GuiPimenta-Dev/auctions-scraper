@@ -1,27 +1,28 @@
 # coding=utf8
 import json
 import sys
-from my_parser import Parser
+from requests_base import BaseRequests
 import requests
 
 
-class CanalJudicial(Parser):
+class CanalJudicial(BaseRequests):
 
     def __init__(self, city, csv_file):
         self.csv_file = csv_file
         self.city = city
 
-        response = json.loads(self.parse_request())
+        response = self.__parse_request()
         self.parse(response)
 
-    def parse_request(self):
+
+    def __parse_request(self):
         url = "https://api.sbwebservices.net/offer-query/offers"
 
         querystring = self.__parse_querystring()
 
         payload = ""
         response = requests.request("GET", url, data=payload, params=querystring)
-        return response.text
+        return json.loads(response.text)
 
     def __parse_querystring(self):
         states_id = {'bahia': 'bahia', 'mato_grosso': 'mato-grosso', 'mato_grosso_do_sul': 'mato-grosso-do-sul',
@@ -108,7 +109,7 @@ class CanalJudicial(Parser):
                 'description': description
             }
 
-            self.save_csv(csv_file=self.csv_file, item=item)
+            self.write_csv(csv_file=self.csv_file, item=item)
 
 
 if __name__ == '__main__':

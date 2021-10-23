@@ -68,17 +68,6 @@ class Resale:
             with open(self.csv_file, 'a', encoding='utf-8') as f:
                 f.write(f'{item["site"]},{item["category"]},{item["price"]},{item["url"]},{item["description"]}\n')
 
-    @staticmethod
-    def convert_currency(amount):
-        thousands_separator = "."
-        currency = "R$ {:,.2f}".format(amount)
-        if thousands_separator == ".":
-            main_currency, fractional_currency = currency.split(".")[0], currency.split(".")[1]
-            new_main_currency = main_currency.replace(",", ".")
-            fractional_separator = ","
-            currency = new_main_currency + fractional_separator + fractional_currency
-
-        return currency
 
 
 if __name__ == '__main__':
