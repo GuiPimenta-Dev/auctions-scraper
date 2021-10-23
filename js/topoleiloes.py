@@ -1,19 +1,21 @@
 import sys
-import time
 
-from auctions.auctions.spiders.selenium.selenium_spider import SeleniumSpider
+from scrapy import Selector
+
+from base import BaseRequests
 
 
-class TopoLeiloes(SeleniumSpider):
+class TopoLeiloes(BaseRequests):
 
     def __init__(self, city, csv_file):
         self.csv_file = csv_file
-        url = self.get_url(city)
-        super().__init__(url)
-        time.sleep(3)
-        self.parse()
 
-    def get_url(self, city):
+        for category in ['4', '6', '12']:
+            url = self.parse_url(city, category)
+            response = self.parse_html_response(url=url)
+            self.parse(response)
+
+    def parse_url(self, city, category):
         states = {'parana': {'id': '18',
                              'cities': {
                                  'antonina': '3925', 'cantagalo': '3974', 'curitiba': '4004',
@@ -35,45 +37,42 @@ class TopoLeiloes(SeleniumSpider):
                           'sao_paulo': '3828'
                       }
                   }
-        }
+                  }
+
+        url = ''
 
         for state_index, state_value in states.items():
             if state_index == city:
                 url = f"https://topoleiloes.com.br/busca?uf={states[state_index]['id']}&cidade=0&categoria=0"
             for city_index, city_value in state_value['cities'].items():
                 if city_index == city:
-                    url = f"https://topoleiloes.com.br/busca?uf={states[state_index]['id']}&cidade={city_value}&categoria=0"
+                    url = f"https://topoleiloes.com.br/busca?uf={states[state_index]['id']}&cidade={city_value}&categoria={category}"
+
         return url
 
-
-    def parse(self):
-        divs = self.driver.find_elements_by_xpath('//div[@class="listing-content"]')
+    def parse(self, response):
+        divs = response.xpath('//div[@class="listing-item evo-pix-box"]').extract()
         site = 'Topo Leilões'
 
         for div in divs:
-            infos = div.text.split('\n')
+            div = Selector(text=div)
 
-            description = infos[1]
+            description = self.clean_html_tags_from_string(div.xpath('//h4/a/@title').get())
 
-            if self.parser.check_if_is_house(description=description):
+            _, dollar_sign, price = div.xpath('//ul[@class="listing-details-valores"]/li').get().partition('R$')
+            price = self.clean_html_tags_from_string(price.strip().split(' ')[0])
+            price = dollar_sign + ' ' + price
 
-                category = self.parser.parse_category_based_on_description(description=description)
+            url = div.xpath('//a[@class="details button border btn-detalhes"]/@href').get()
 
-                _, dollar_sign, price = infos[3].partition('R$')
-                price = price.strip().split(' ')[0]
-                price = dollar_sign + ' ' + price
+            item = {
+                'site': site,
+                'price': price,
+                'url': url,
+                'description': description
+            }
 
-                url = div.find_element_by_xpath('//h4/a').get_attribute('href')
-
-                item = {
-                    'site': site,
-                    'category': category,
-                    'price': price,
-                    'url': url,
-                    'description': description
-                }
-
-                self.write_csv(item=item, csv_file=self.csv_file)
+            self.write_csv(item=item, csv_file=self.csv_file)
 
 
 if __name__ == '__main__':

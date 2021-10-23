@@ -99,3 +99,4 @@ class Parser:
             return 'Imóvel'
         else:
             return 'Não Identificado'
+
