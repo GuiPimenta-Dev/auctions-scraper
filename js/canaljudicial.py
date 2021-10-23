@@ -1,7 +1,7 @@
 # coding=utf8
 import json
 import sys
-from requests_base import BaseRequests
+from base import BaseRequests
 import requests
 
 
@@ -11,18 +11,12 @@ class CanalJudicial(BaseRequests):
         self.csv_file = csv_file
         self.city = city
 
-        response = self.__parse_request()
-        self.parse(response)
-
-
-    def __parse_request(self):
         url = "https://api.sbwebservices.net/offer-query/offers"
-
         querystring = self.__parse_querystring()
 
-        payload = ""
-        response = requests.request("GET", url, data=payload, params=querystring)
-        return json.loads(response.text)
+        response = self.parse_json_response(url=url, query_params=querystring)
+
+        self.parse(response)
 
     def __parse_querystring(self):
         states_id = {'bahia': 'bahia', 'mato_grosso': 'mato-grosso', 'mato_grosso_do_sul': 'mato-grosso-do-sul',
@@ -100,10 +94,8 @@ class CanalJudicial(BaseRequests):
                 '.', '')
             url += '-' + str(offer['id'])
             price = offer['priceFormatted']
-            category = self.parse_category_based_on_description(description)
             item = {
                 'site': site,
-                'category': category,
                 'price': price,
                 'url': url,
                 'description': description
