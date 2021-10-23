@@ -43,7 +43,7 @@ class TopoLeiloes(BaseRequests):
 
         for state_index, state_value in states.items():
             if state_index == city:
-                url = f"https://topoleiloes.com.br/busca?uf={states[state_index]['id']}&cidade=0&categoria=0"
+                url = f"https://topoleiloes.com.br/busca?uf={states[state_index]['id']}&cidade=0&categoria={category}"
             for city_index, city_value in state_value['cities'].items():
                 if city_index == city:
                     url = f"https://topoleiloes.com.br/busca?uf={states[state_index]['id']}&cidade={city_value}&categoria={category}"
