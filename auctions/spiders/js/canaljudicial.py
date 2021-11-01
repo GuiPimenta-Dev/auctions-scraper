@@ -104,6 +104,8 @@ class CanalJudicial(BaseRequests):
 
 
 if __name__ == '__main__':
-    city = sys.argv[1]
-    csv_file = sys.argv[2]
+    city = 'curitiba'
+    # city = sys.argv[1]
+    csv_file = 'teste.csv'
+    # csv_file = sys.argv[2]
     CanalJudicial(city, csv_file)

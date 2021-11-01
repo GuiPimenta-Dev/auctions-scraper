@@ -7,7 +7,7 @@ import requests
 import urllib
 
 
-from auctions.flask_runner import Runner
+from flask_runner import Runner
 
 app = Flask(__name__)
 CORS(app)

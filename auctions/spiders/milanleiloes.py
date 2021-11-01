@@ -106,7 +106,10 @@ class MilanleiloesSpider(scrapy.Spider):
         item = AuctionsItem()
         trs = response.xpath('//table[@class="general_table"]//tr').extract()
         for tr in trs:
-            button = self.parser.get_single_value_from_string(raw_string=tr, xpath='//a/@href')
+            try:
+                button = self.parser.get_single_value_from_string(raw_string=tr, xpath='//a/@href')
+            except:
+                continue
             if button:
                 item['site'] = 'Milan Leilões'
 

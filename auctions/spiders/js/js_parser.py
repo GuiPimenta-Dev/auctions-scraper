@@ -1,98 +1,31 @@
-from scrapy.selector import Selector
+import html
 import re
 from unicodedata import normalize
 
 
 class Parser:
 
-    def get_multiple_values_from_string(self, raw_string: str, xpath: str):
-        response = Selector(text=raw_string).xpath(xpath).extract()
-        return ' '.join(response).strip().replace('\n', '').replace('\r', '').replace('\t', '')
+    @staticmethod
+    def convert_currency(amount):
+        thousands_separator = "."
+        currency = "R$ {:,.2f}".format(amount)
+        if thousands_separator == ".":
+            main_currency, fractional_currency = currency.split(".")[0], currency.split(".")[1]
+            new_main_currency = main_currency.replace(",", ".")
+            fractional_separator = ","
+            currency = new_main_currency + fractional_separator + fractional_currency
 
-    def get_single_value_from_string(self, raw_string: str, xpath: str):
-        return Selector(text=raw_string).xpath(xpath).get().strip().replace('\n', '').replace('\r', '').replace('\t',
-                                                                                                                '')
+        return currency
 
-    def clean_html_tags_from_string(self, raw_string: str):
+    @staticmethod
+    def clean_html_tags_from_string(raw_string: str):
         cleanr = re.compile('<.*?>')
-        return re.sub(cleanr, '', raw_string).strip()
+        return html.unescape(
+            re.sub(cleanr, '', raw_string).strip().replace('\n', '').replace('\r', '').replace('\t', ''))
 
-    def raw_header_to_dict(self, raw_headers: str) -> dict:
-        raw_headers = raw_headers.split('\n')
-        raw_headers = [x.strip() for x in raw_headers if x.strip()]
-        dict_header = {
-            i.split(': ')[0].strip(): i.split(': ')[1].strip()
-            for i in raw_headers
-        }
-
-        if 'Host' in dict_header:
-            del dict_header['Host']
-        if 'content-length' in dict_header:
-            del dict_header['content-length']
-        if 'cookie' in dict_header:
-            del dict_header['cookie']
-        if 'user-agent' in dict_header:
-            del dict_header['user-agent']
-
-        return dict_header
-
-    def parse_select_dict(self, raw_select: str, exclude_first_option=False, split_key: str = None,
-                          split_value: str = None):
-        opt = {}
-        raw_selects = raw_select.replace('<option value=', '').replace('"', '').replace('<select>', '').replace(
-            '</select>', '').strip().split('</option>')
-        if exclude_first_option:
-            raw_selects = raw_selects[1:]
-        for select in raw_selects:
-            if select:
-                value, _, key = select.partition('>')
-                key = self.normalize_string(key)
-                if split_key:
-                    key = key.split(split_key)[0]
-                if split_value:
-                    value = value.split(split_value)[0]
-                opt[key] = value.strip()
-
-        return opt
-
-    def _parse_select_dict(self, raw_select: str, exclude_first_option=False, split_key: str = None,
-                           split_value: str = None
-                           ):
-        opt = {}
-        raw_selects = raw_select.strip().split('</option>')
-        if exclude_first_option:
-            raw_selects = raw_selects[1:]
-        for select in raw_selects:
-            if select:
-                _, _, after_value = select.partition(f'{split_value}="')
-                value = after_value.split('"')[0]
-                key, _, _ = select.partition(f'{split_key}')
-                key = key.split('>')[-1]
-
-                try:
-                    key = key.split('-')[0].strip()
-                except:
-                    pass
-                key = self.normalize_string(key)
-                opt[key] = value.strip()
-        try:
-            del opt['']
-        except:
-            pass
-        return opt
-
-    def parse_select_dict_without_values(self, raw_select: str):
-        opt = []
-        options = raw_select.split('</option>')[1:]
-        for option in options:
-            cleaned_option = self.clean_html_tags_from_string(option.strip())
-            if cleaned_option:
-                opt.append(cleaned_option)
-
-        return opt
-
-    def normalize_string(self, raw_string):
-        treated_string = raw_string.lower().replace(' ', '_').replace("'", '').replace('ç','c')
+    @staticmethod
+    def normalize_string(raw_string):
+        treated_string = raw_string.lower().replace(' ', '_').replace("'", '')
         return (
             normalize('NFKD', treated_string)
                 .encode('ASCII', 'ignore')
@@ -4311,3 +4244,6 @@ class Parser:
                    'couto_magalhaes': 'couto-magalhaes'}}
 
         return states_id, states_city_for_each_state
+
+
+

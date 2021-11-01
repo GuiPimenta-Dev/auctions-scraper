@@ -334,6 +334,7 @@ class FrancoleiloesSpider(scrapy.Spider):
                         data_bem_estado_id = state_id
                         data_bem_cidade_id = city_id
 
+
         # url = f'https://francoleiloes.com.br/Leiloes/BuscarPorCidade?cidade={data_bem_cidade_id}&estado={data_bem_estado_id}&vendedor=1&bairro=1&tipo=1&favoritos=false&tipoBusca=Abertos&aonde=btnBuscaTexto&expressao='
         url = f'https://www.francoleiloes.com.br/?estado=RS&cidade=BAG%C3%89&tipoBusca=Abertos'
 

@@ -25,7 +25,7 @@ class CentralSul(BaseRequests):
 
             lot_url = f'https://www.centralsuldeleiloes.com.br/api/auction-detran/{id}'
 
-            lot = self.parse_request(url=lot_url)['body']['lots'][0]
+            lot = self.parse_json_response(url=lot_url)['body']['lots'][0]
 
             price = self.convert_currency(lot['minimum_bid'])
 
@@ -42,6 +42,9 @@ class CentralSul(BaseRequests):
 
 
 if __name__ == '__main__':
-    city = sys.argv[1]
-    csv_file = sys.argv[2]
+    city = 'curitiba'
+    # city = sys.argv[1]
+    csv_file = 'teste.json'
+    # csv_file = sys.argv[2]
     CentralSul(city, csv_file)
+

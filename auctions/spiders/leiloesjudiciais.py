@@ -114,6 +114,7 @@ class LeiloesJudiciaisSpider(scrapy.Spider):
                         data_bem_estado_id = state_id
                         data_bem_cidade_id = city_id
 
+
         data = {
             'data[Bem][estado_id]': data_bem_estado_id,
             'data[Bem][cidade_id]': data_bem_cidade_id,

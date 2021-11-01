@@ -10,12 +10,6 @@ class SuperBid(BaseRequests):
         self.csv_file = csv_file
         self.city = city
 
-
-        url = "https://api.sbwebservices.net/offer-query/offers"
-
-
-
-
         url = "https://api.sbwebservices.net/offer-query/offers"
         querystring = self.__parse_querystring()
 
@@ -143,8 +137,6 @@ class SuperBid(BaseRequests):
 
 
 if __name__ == '__main__':
-    # city = sys.argv[1]
-    city = 'curitiba'
-    # csv_file = sys.argv[2]
-    csv_file = 'teste.csv'
+    city = sys.argv[1]
+    csv_file = sys.argv[2]
     SuperBid(city, csv_file)

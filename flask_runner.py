@@ -16,9 +16,11 @@ class JSApp(Thread):
         self.result_csv = result_csv
 
     def run(self):
-        os.system(f'python auctions/auctions/spiders/selenium/{self.spider}.py "{self.city}" "{self.result_csv}.csv"')
+        os.system(
+            f'python C:\\Users\\gpimentahays\\Documents\\Freelas\\Marcella\\leilao\\auctions\\auctions\\spiders\\js\\{self.spider}.py "{self.city}" "{self.result_csv}.csv"')
 
-class App():
+
+class App(Thread):
     def __init__(self, spider, city, result_csv):
         super().__init__()
         self.spider = spider
@@ -27,7 +29,6 @@ class App():
 
     def run(self):
         os.system(f'scrapy crawl {self.spider} -a city="{self.city}" -o {self.result_csv}.csv')
-
 
 
 class Runner:
@@ -60,9 +61,15 @@ class Runner:
         # app21 = App(spider='sodresantoro', city=city, result_csv=result_csv)
         # app22 = App(spider='topoleiloes', city=city, result_csv=result_csv)
         # app23 = App(spider='zukerman', city=city, result_csv=result_csv)
-        app24 = JSApp(spider='leiloes', city=city, result_csv=result_csv)
+        app24 = JSApp(spider='canaljudicial', city=city, result_csv=result_csv)
+        app26 = JSApp(spider='centralsul', city=city, result_csv=result_csv)
+        app27 = JSApp(spider='francoleiloes', city=city, result_csv=result_csv)
+        app28 = JSApp(spider='superbid', city=city, result_csv=result_csv)
+        app29 = JSApp(spider='topoleiloes', city=city, result_csv=result_csv)
+        app30 = JSApp(spider='caixa', city=city, result_csv=result_csv)
+        app31 = JSApp(spider='resale', city=city, result_csv=result_csv)
 
-        #
+
         # app1.run()
         # app2.run()
         # app3.run()
@@ -87,6 +94,12 @@ class Runner:
         # app22.run()
         # app23.run()
         app24.run()
+        app26.run()
+        app27.run()
+        app28.run()
+        app29.run()
+        app30.run()
+        app31.run()
 
         # app1.start()
         # app2.start()
@@ -112,6 +125,12 @@ class Runner:
         # app22.start()
         # app23.start()
         app24.start()
+        app26.start()
+        app27.start()
+        app28.start()
+        app29.start()
+        app30.start()
+        app31.start()
 
         # app1.join()
         # app2.join()
@@ -137,6 +156,12 @@ class Runner:
         # app22.join()
         # app23.join()
         app24.join()
+        app26.join()
+        app27.join()
+        app28.join()
+        app29.join()
+        app30.join()
+        app31.join()
 
         read_file = pd.read_csv(f'./{result_csv}.csv', names=['site', 'category', 'price', 'url', 'description'])
         return json.loads(read_file.to_json(orient='table', index=False))

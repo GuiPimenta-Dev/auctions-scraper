@@ -72,7 +72,7 @@ class TopoLeiloes(BaseRequests):
                 'description': description
             }
 
-            self.write_json(item=item, json_file=self.csv_file)
+            self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':
