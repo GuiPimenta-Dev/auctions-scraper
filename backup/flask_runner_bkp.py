@@ -1,14 +1,23 @@
-import time
-
-from PyQt5.QtWidgets import *
-from PyQt5.uic import loadUi
 import datetime
+import logging
 import os
 from threading import *
 import teste as pd
-from auctions.utils.parser import Parser
-from PyQt5.QtCore import pyqtSignal, QThread
+import json
 
+from auctions.utils.parser import Parser
+
+
+class JSApp(Thread):
+    def __init__(self, spider, city, result_csv):
+        super().__init__()
+        self.spider = spider
+        self.city = city
+        self.result_csv = result_csv
+
+    def run(self):
+        os.system(
+            f'python C:\\Users\\gabriel\\auctions\\auctions\\spiders\\js\\{self.spider}.py "{self.city}" "{self.result_csv}.csv"')
 
 
 class App(Thread):
@@ -17,23 +26,16 @@ class App(Thread):
         self.spider = spider
         self.city = city
         self.result_csv = result_csv
+
     def run(self):
         os.system(f'scrapy crawl {self.spider} -a city="{self.city}" -o {self.result_csv}.csv')
 
 
-class Main(QMainWindow):
-    def __init__(self):
-        # Carregando a Janela principal e o Layout
-        QMainWindow.__init__(self)
-        self.main_window = loadUi(".\\ui\\main_window.ui", self)
-        self.lbl_status.hide()
-        self.btn_submit.clicked.connect(self.run_spiders)
+class Runner:
 
-
-    def run_spiders(self):
-
+    def run_robots(self, city):
         parser = Parser()
-        city = parser.normalize_string(self.txt_search.text())
+        city = parser.normalize_string(city)
         result_csv = 'output/' + city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
 
         app1 = App(spider='amleiloeiro', city=city, result_csv=result_csv)
@@ -60,6 +62,45 @@ class Main(QMainWindow):
         app22 = App(spider='topoleiloes', city=city, result_csv=result_csv)
         app23 = App(spider='zukerman', city=city, result_csv=result_csv)
 
+        app24 = JSApp(spider='canaljudicial', city=city, result_csv=result_csv)
+        app26 = JSApp(spider='centralsul', city=city, result_csv=result_csv)
+        app27 = JSApp(spider='francoleiloes', city=city, result_csv=result_csv)
+        app28 = JSApp(spider='superbid', city=city, result_csv=result_csv)
+        app29 = JSApp(spider='topoleiloes', city=city, result_csv=result_csv)
+        app30 = JSApp(spider='caixa', city=city, result_csv=result_csv)
+        app31 = JSApp(spider='resale', city=city, result_csv=result_csv)
+
+        app1.run()
+        app2.run()
+        app3.run()
+        app4.run()
+        app5.run()
+        app6.run()
+        app7.run()
+        app8.run()
+        app9.run()
+        app10.run()
+        app11.run()
+        app12.run()
+        app13.run()
+        app14.run()
+        app15.run()
+        app16.run()
+        app17.run()
+        app18.run()
+        app19.run()
+        app20.run()
+        app21.run()
+        app22.run()
+        app23.run()
+        app24.run()
+        app26.run()
+        app27.run()
+        app28.run()
+        app29.run()
+        app30.run()
+        app31.run()
+
         app1.start()
         app2.start()
         app3.start()
@@ -83,6 +124,13 @@ class Main(QMainWindow):
         app21.start()
         app22.start()
         app23.start()
+        app24.start()
+        app26.start()
+        app27.start()
+        app28.start()
+        app29.start()
+        app30.start()
+        app31.start()
 
         app1.join()
         app2.join()
@@ -107,17 +155,13 @@ class Main(QMainWindow):
         app21.join()
         app22.join()
         app23.join()
+        app24.join()
+        app26.join()
+        app27.join()
+        app28.join()
+        app29.join()
+        app30.join()
+        app31.join()
 
-        try:
-            read_file = pd.read_csv(f'./{result_csv}.csv')
-            read_file.to_excel(f'./{result_csv}.xlsx', index=None, header=['Site', 'Categoria', 'Preço', 'Url', 'Descrição'])
-            os.system(f"start EXCEL.EXE ./{result_csv}.xlsx")
-            self.lbl_status.hide()
-        except:
-            self.lbl_status.show()
-
-if __name__ == '__main__':
-    app = QApplication([])
-    window = Main()
-    window.show()
-    app.exec_()
+        read_file = pd.read_csv(f'./{result_csv}.csv', names=['site', 'category', 'price', 'url', 'description'])
+        return json.loads(read_file.to_json(orient='table', index=False))
