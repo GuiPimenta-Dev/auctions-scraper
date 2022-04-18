@@ -159,7 +159,7 @@ def filter_and_send_email():
     
     <body>
         
-        <h1> SCHEDULE LEILÃO </h1>
+        <h1> NOVOS LEILÕES </h1>
             {content}
         <br><br>
     </body>
