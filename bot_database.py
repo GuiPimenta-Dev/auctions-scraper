@@ -5,9 +5,8 @@ import os
 from clients_database import Data_base_manager
 import win32com.client as win32
 
-
-
-
+import schedule
+import time
 
 
 def check_db(city, new_data):
@@ -38,27 +37,33 @@ def check_db(city, new_data):
 
     return new_auctions
 
+
 def filter_and_send_email():
     runner = Runner()
     clientsDB = Data_base_manager('auctions_db', 'clients',
                                   ['client_name', 'client_local'])
-
+    # ALL DIFERENT PLACES IN DB
     places = clientsDB.select_distinct('client_local', '')
+
+    # CLIENTS TUPLES
     clients = clientsDB.show_table()
 
     news = {}
     for place in places:
         place = place[0]
-        #GET THE NEW DATA
+        # GET THE NEW DATA
         data = runner.run_robots(place)
 
         # CHECK THE DATABASE
-        result = check_db(place,data)
+        result = check_db(place, data)
         print(result)
         news[place] = result
+    keep = False
+    for new in news.keys():
+        if news[new]:
+            keep = True
 
-
-    if len(result)>0:
+    if keep:
         print('mandando email..')
         outlook = win32.Dispatch('outlook.application')
         email = outlook.CreateItem(0)
@@ -77,85 +82,102 @@ def filter_and_send_email():
             if len(news[new]) > 0:
                 for n in news[new]:
                     table += f"""
-                    <tr>
-                        <td>{n[0]}</td>
-                        <td>{n[1]}</td>
-                        <td>{n[2]}</td>
-                        <td>{n[3]}</td>                        
-                    </tr>
+                       <tbody>
+                            <tr>
+                                <td>{n[0]}</td>
+                                <td>{n[1]}</td>
+                                <td>{n[2]}</td>
+                                <td>{n[3]}</td>                        
+                            </tr>
+                        </tbody>
+                        
+                    """
+
+                content += f"""<p> Clientes interessados: {clients_to_send}. <br>({len(news[new])}) Novos leilões <br> LUGAR: {new}<p/>
+               
+                        <table >
+                            <thead style="font-size:25px" > 
+                                <tr style="background-color: #35CE8D";>
+                                    <th style="font-size: 25px">SITE</th>
+                                    <th>CATEGORIA</th>
+                                    <th>PREÇO</th>
+                                    <th>URL</th>                            
+                                </tr>                    
+                            </thead>
+                                {table}
+                        </table>
+                    
                 """
 
-                content += f"""<p style="font-size: 25px;
-    font-weight: 400;"> Clientes interessados: {clients_to_send} <br>({len(news[new])}) Novos leilões <br> LUGAR: {new}<p/>
-           <section style ="box-shadow: 0 5px 8px rgb(194, 194, 194);
-    max-height: 500px;
-    margin: 50px;
-    display: block;
-    overflow: auto;">
-                <table style="box-shadow: 0 5px 8px rgb(194, 194, 194);
-    border-collapse: collapse;
-    text-align: center;
-    width: 100%;
-    margin: auto;">
-                    <thead style="position: sticky;
-    top: 0;
-    background-color: white;
-    box-shadow: 0 5px 8px rgb(194, 194, 194);
-    padding: 15px;
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
-    background-color: rgb(230, 230, 230);
-    line-height: 60px;">
-                        <tr>
-                            <th>Site</th>
-                            <th>Categoria</th>
-                            <th>Preço</th>
-                            <th>Url</th>                            
-                        </tr>
-                    </thead>
-                    <tbody style="line-height: 50px">
-                        
-                            {table}
-                        
-                    </tbody>
-                    </table>
-                </section>
-            """
+        css = """
+            <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
-
-        css = """tbody tr:nth-child(even){
-    background-color: #42d699d5;
-    color: rgb(0, 0, 0);
-}"""
-        email.HTMLBody = f"""
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        
-    </style>
-</head>
-<body>
-    <container style = "font-family: 'Roboto', sans-serif;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    background-color: rgb(255, 255, 255)">
-    <h1 style = "font-weight: 700;
-    font-size: 45px;
-    text-transform: uppercase;
-    text-align: center;"> NOVOS LEILÕES </>
-        {css}
-    </container>
-</body>
-</html>
+            body{
+                font-family: Roboto;
+                background-color: rgb(241, 241, 241);
+            }
+            h1{
+                font-size: 60px;
+                text-transform: uppercase;
+                text-align: center;
+            }
+             p{
+                font-size: 25px;
+            }
+            table{
+                width: 80%;
+                margin: auto;
+                box-shadow: 10px 10px 18px rgb(194, 194, 194);
+                border-collapse: collapse;
+                text-align: center;  
+                background-color: white; 
+               
+                
+            }
+            thead{
+                line-height: 50px;
+                font-size: 25px;
+                box-shadow: 0 5px 8px rgb(163, 163, 163);
+                background-color: #35CE8D;
+                color: white;
+                
+            }
+            tbody tr{
+                line-height: 50px;
+            }
+            tbody tr:nth-child(even){
+                background-color: rgb(243, 243, 243);
+            }
+            </style>
         """
+        email.HTMLBody = f"""
+        
+                  {css}      
+        
+    </head>
+    
+    <body>
+        
+        <h1> SCHEDULE LEILÃO </h1>
+            {content}
+        <br><br>
+    </body>
+            """
         email.Send()
         print('email enviado')
 
+
+
+
+
+
 filter_and_send_email()
+
+schedule.every(5).minutes.do(filter_and_send_email)
+
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+

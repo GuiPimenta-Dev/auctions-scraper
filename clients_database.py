@@ -104,8 +104,7 @@ auctions_db = Data_base_manager('auctions_db', 'auctions',
 clientsDB = Data_base_manager('auctions_db', 'clients',
                               ['client_name', 'client_local'])
 
-
-
-# print(len(auctions_db.show_table()))
-# auctions_db.delete_db('site= "Zukerman"')
-# print(len(auctions_db.show_table()))
+# antes = len(auctions_db.show_table())
+# auctions_db.delete_db('local = "São paulo"')
+# depois = len(auctions_db.show_table())
+# print(f'diferença: {antes - depois}')
