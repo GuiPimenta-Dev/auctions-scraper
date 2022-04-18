@@ -1,7 +1,7 @@
 import datetime
 import os
 from threading import *
-import pandas as pd
+import teste as pd
 
 
 class App(Thread):

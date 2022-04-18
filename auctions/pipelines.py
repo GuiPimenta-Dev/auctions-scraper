@@ -8,27 +8,14 @@
 from itemadapter import ItemAdapter
 from openpyxl import load_workbook
 import os
-
-
 class AuctionsPipeline:
     def process_item(self, item, spider):
-
-        # new_row_data = [
-        #     [
-        #         item['site'],
-        #         item['category'],
-        #         item['price'],
-        #         item['url'],
-        #         item['description']
-        #     ]
-        # ]
-        # wb = load_workbook("results.xls")
-        # # Select First Worksheet
-        # ws = wb.worksheets[0]
+        # city = 'NONE'
+        # site = f"{item['site']}"
+        # price = f"{item['price']}"
+        # url = f"{item['url']}"
         #
-        # # Append 2 new Rows - Columns A - D
-        # for row_data in new_row_data:
-        #     # Append Row Values
-        #     ws.append(row_data)
+        # auctions_db.insert_auction(city,site,price,url)
+
         print(item)
         return item
