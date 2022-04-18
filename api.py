@@ -1,12 +1,10 @@
 import json
 from urllib.parse import urlencode
 from clients_database import Data_base_manager, client_check, create_table
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 import urllib
-
 import mysql.connector
 from flask_runner import Runner
 

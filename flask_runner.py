@@ -35,22 +35,21 @@ class Runner:
         city = parser.normalize_string(city)
         result_csv = 'output/' + city + '-' + datetime.datetime.now().strftime('%H_%M_%S')
 
-        # spider_list_scrapy = ['amleiloeiro', 'biasleiloes', 'freitasleiloeiro', 'joaoluizleiloes', 'kleiloes',
-        #                       'kronbergleiloes', 'lancenoleilao', 'leilaobrasil', 'leilaovip',
-        #                       'leiloesjudiciais', 'leje', 'lut', 'megaleiloes', 'milanleiloes', 'nakakogueleiloes',
-        #                       'nossoleilao', 'psnleiloes', 'rochaleiloes', 'santacatarinaleiloes',
-        #                       'satoleiloes', 'sodresantoro', 'topoleiloes', 'zukerman']
-        #
-        # spider_list_selenium = [ 'francoleiloes','canaljudicial', 'centralsul',
-        #                         'superbid', 'caixa', 'resale']
+        spider_list_scrapy = ['amleiloeiro', 'biasleiloes', 'freitasleiloeiro', 'joaoluizleiloes', 'kleiloes',
+                              'kronbergleiloes', 'lancenoleilao', 'leilaobrasil', 'leilaovip',
+                              'leiloesjudiciais', 'leje', 'lut', 'megaleiloes', 'milanleiloes', 'nakakogueleiloes',
+                              'nossoleilao', 'psnleiloes', 'rochaleiloes', 'santacatarinaleiloes',
+                              'satoleiloes', 'sodresantoro', 'topoleiloes', 'zukerman']
 
-        spider_list_scrapy = [ 'zukerman' ]
+        spider_list_selenium = [ 'francoleiloes','canaljudicial', 'centralsul',
+                                'superbid', 'caixa', 'resale']
+
 
         for spider in spider_list_scrapy:
             os.system(f'scrapy crawl {spider} -a city="{city}" -o {result_csv}.csv')
 
-        # for spider in spider_list_selenium:
-        #     os.system(f'python C:\\Users\\gabriel\\auctions\\auctions\\spiders\\js\\{spider}.py "{city}" "{result_csv}.csv"')
+        for spider in spider_list_selenium:
+            os.system(f'python C:\\Users\\gabriel\\auctions\\auctions\\spiders\\js\\{spider}.py "{city}" "{result_csv}.csv"')
 
         read_file = pd.read_csv(f'./{result_csv}.csv', names=['site', 'category', 'price', 'url', 'description'])
         return json.loads(read_file.to_json(orient='table', index=False))

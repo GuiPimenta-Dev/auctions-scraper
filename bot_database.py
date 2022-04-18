@@ -3,7 +3,12 @@ import mysql.connector
 from flask_runner import Runner
 import os
 from clients_database import Data_base_manager
-import win32com.client as win32
+
+
+import smtplib
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 import schedule
 import time
@@ -64,11 +69,19 @@ def filter_and_send_email():
             keep = True
 
     if keep:
+
+        host = "smtp.gmail.com"
+        port = "587"
+        login = "botdeleiloes123@gmail.com"
+        senha = "123!!456"
+
+        server = smtplib.SMTP(host, port)
+
+        server.ehlo()
+        server.starttls()
+        server.login(login, senha)
+
         print('mandando email..')
-        outlook = win32.Dispatch('outlook.application')
-        email = outlook.CreateItem(0)
-        email.To = 'guialvespimenta27@gmail.com'
-        email.Subject = 'Novos Leilões'
 
         content = ''
 
@@ -151,7 +164,7 @@ def filter_and_send_email():
             }
             </style>
         """
-        email.HTMLBody = f"""
+        body = f"""
         
                   {css}      
         
@@ -164,7 +177,14 @@ def filter_and_send_email():
         <br><br>
     </body>
             """
-        email.Send()
+
+        email_msg = MIMEMultipart()
+        email_msg['From'] = login
+        email_msg['To'] = 'gabrielpimenttas@gmail.com'
+        email_msg['Subject'] = 'email automatico'
+        email_msg.attach(MIMEText(body, 'html'))
+        server.sendmail(email_msg['From'], email_msg['To'], email_msg.as_string())
+        server.quit()
         print('email enviado')
 
 
