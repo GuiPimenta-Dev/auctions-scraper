@@ -67,7 +67,7 @@ def filter_and_send_email():
         print('mandando email..')
         outlook = win32.Dispatch('outlook.application')
         email = outlook.CreateItem(0)
-        email.To = 'gabrielpimenttas@gmail.com'
+        email.To = 'guialvespimenta27@gmail.com'
         email.Subject = 'Novos Leilões'
 
         content = ''
@@ -93,7 +93,7 @@ def filter_and_send_email():
                         
                     """
 
-                content += f"""<p> Clientes interessados: {clients_to_send}. <br>({len(news[new])}) Novos leilões <br> LUGAR: {new}<p/>
+                content += f"""<p> Clientes interessados: {clients_to_send}. <br>{len(news[new])} Novos leilões <br> LUGAR: {new}<p/>
                
                         <table >
                             <thead style="font-size:25px" > 
@@ -170,11 +170,9 @@ def filter_and_send_email():
 
 
 
-
-
 filter_and_send_email()
 
-schedule.every(5).minutes.do(filter_and_send_email)
+schedule.every().day.do(filter_and_send_email)
 
 
 while True:
