@@ -1,5 +1,5 @@
 import mysql.connector
-import  win32com.client as win32
+
 
 
 class Data_base_manager:
@@ -19,7 +19,14 @@ class Data_base_manager:
         self.cnx.close()
 
     def insert_db(self, row):
-        values = '","'.join(row)
+        line = []
+        for cel in row:
+            if cel is None:
+                line.append('-')
+            else:
+                line.append(cel)
+
+        values = '","'.join(line)
         command = f'INSERT INTO {self.table}({self.keys}) VALUES("{values}")'
 
         self.cur.execute(command)

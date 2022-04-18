@@ -9,5 +9,5 @@ pandas
 openpyxl
 rq
 schedule
-win32com
+smtplib
 mysql

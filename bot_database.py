@@ -3,11 +3,11 @@ import mysql.connector
 from flask_runner import Runner
 import os
 from clients_database import Data_base_manager
-import win32com.client as win32
+
 
 import smtplib
 
-from email.mime.multipart import  MIMEMultipart
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 import schedule
@@ -72,7 +72,7 @@ def filter_and_send_email():
 
         host = "smtp.gmail.com"
         port = "587"
-        login = "gabrieldevtestes@gmail.com"
+        login = "botdeleiloes123@gmail.com"
         senha = "123!!456"
 
         server = smtplib.SMTP(host, port)
@@ -82,10 +82,6 @@ def filter_and_send_email():
         server.login(login, senha)
 
         print('mandando email..')
-        outlook = win32.Dispatch('outlook.application')
-        email = outlook.CreateItem(0)
-        email.To = 'guialvespimenta27@gmail.com'
-        email.Subject = 'Novos Leilões'
 
         content = ''
 
