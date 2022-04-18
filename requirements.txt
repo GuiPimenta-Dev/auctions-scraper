@@ -8,3 +8,6 @@ gunicorn
 pandas
 openpyxl
 rq
+schedule
+win32com
+mysql
