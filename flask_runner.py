@@ -38,11 +38,11 @@ class Runner:
         spider_list_scrapy = ['amleiloeiro', 'biasleiloes', 'freitasleiloeiro', 'joaoluizleiloes', 'kleiloes',
                               'kronbergleiloes', 'lancenoleilao', 'leilaobrasil', 'leilaovip',
                               'leiloesjudiciais', 'leje', 'lut', 'megaleiloes', 'milanleiloes', 'nakakogueleiloes',
-                              'nossoleilao', 'psnleiloes', 'rochaleiloes', 'santacatarinaleiloes',
+                              'nossoleilao', 'psnleiloes', 'rochaleiloes', 'santacatarinaleiloes'
                               'satoleiloes', 'sodresantoro', 'topoleiloes', 'zukerman']
 
         spider_list_selenium = [ 'francoleiloes','canaljudicial', 'centralsul',
-                                'superbid', 'caixa', 'resale']
+                                'superbid', 'resale', 'caixa']
 
 
         for spider in spider_list_scrapy:

@@ -3,7 +3,12 @@ import sys
 
 import requests
 from scrapy import Selector
+
+
 from base import BaseRequests
+
+from auctions.utils.parser import Parser
+parser = Parser()
 
 
 class Caixa(BaseRequests):
@@ -196,8 +201,8 @@ class Caixa(BaseRequests):
                     'url': url,
                     'description': description
                 }
-
-                self.write_csv(csv_file=csv_file, item=item)
+                if self.city in parser.normalize_string(item['description']) or self.city in parser.normalize_string(item['url']):
+                    self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':

@@ -2,11 +2,14 @@ import sys
 import time
 
 from base_selenium import BaseSelenium
+from auctions.utils.parser import Parser
+parser = Parser()
 
 class Leiloes(BaseSelenium):
 
     def __init__(self, city, csv_file):
         self.csv_file = csv_file
+        self.city = city
         url = self.get_url(city)
         super().__init__(url)
         time.sleep(10)
@@ -47,12 +50,12 @@ class Leiloes(BaseSelenium):
                 'description': description
             }
 
-            self.write_csv(item=item, csv_file=self.csv_file)
+            if self.city in parser.normalize_string(item['description']) or self.city in parser.normalize_string(
+                    item['url']):
+                self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':
-    city = 'sao_paulo'
-    # city = sys.argv[1]
-    # csv_file = sys.argv[2]
-    csv_file = 'teste.csv'
+    city = sys.argv[1]
+    csv_file = sys.argv[2]
     Leiloes(city, csv_file)
