@@ -4,11 +4,13 @@ from scrapy import Selector
 
 from base import BaseRequests
 
-
+from auctions.utils.parser import Parser
+parser = Parser()
 class TopoLeiloes(BaseRequests):
 
     def __init__(self, city, csv_file):
         self.csv_file = csv_file
+        self.city = city
 
         for category in ['4', '6', '12']:
             url = self.parse_url(city, category)
@@ -72,7 +74,9 @@ class TopoLeiloes(BaseRequests):
                 'description': description
             }
 
-            self.write_csv(csv_file=csv_file, item=item)
+            if self.city in parser.normalize_string(item['description']) or self.city in parser.normalize_string(
+                    item['url']):
+                self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':

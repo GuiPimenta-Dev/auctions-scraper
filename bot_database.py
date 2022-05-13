@@ -190,9 +190,9 @@ def filter_and_send_email():
 
 
 
-filter_and_send_email()
 
-schedule.every().day.do(filter_and_send_email)
+
+schedule.every(4).minutes.do(filter_and_send_email)
 
 
 while True:

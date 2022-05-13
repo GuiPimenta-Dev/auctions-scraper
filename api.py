@@ -34,7 +34,6 @@ def run_robots():
 
     except Exception as e:
         data = str(e)
-    print(data)
     return data
 
 
@@ -47,18 +46,12 @@ def register_db(name, local):
         if client_check(clients_db, (name, local)):
             clients_db.insert_db([name,local])
 
-            print(local)
-
             current_places = auctions_db.select_distinct('local','')
             print(current_places)
             if (local,) in current_places:
                 print('Já tem')
-
             else:
-                print('nao tem')
                 datas = runner.run_robots(local)
-                print('fim')
-                print(datas)
                 for data in datas['data']:
                     auctions_db.insert_db([data['site'],data['category'], data['price'], data['url'], local])
 

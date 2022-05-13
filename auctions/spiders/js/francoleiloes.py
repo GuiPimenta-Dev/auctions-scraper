@@ -3,12 +3,14 @@ import sys
 from scrapy import Selector
 
 from base import BaseRequests
+from auctions.utils.parser import Parser
+parser = Parser()
 
 
 class FrancoLeiloes(BaseRequests):
     def __init__(self, city, csv_file):
         self.csv_file = csv_file
-
+        self.city = city
         url = "https://francoleiloes.com.br/Leiloes/BuscarPorCidade"
 
         querystring = self.__parse_querystring()
@@ -392,8 +394,10 @@ class FrancoLeiloes(BaseRequests):
                     'url': url,
                     'description': description
                 }
+                if self.city in parser.normalize_string(item['description']) or self.city in parser.normalize_string(
+                        item['url']):
+                    self.write_csv(csv_file=csv_file, item=item)
 
-                self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':

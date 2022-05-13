@@ -4,7 +4,8 @@ import sys
 import requests
 
 from base import BaseRequests
-
+from auctions.utils.parser import Parser
+parser = Parser()
 
 class Resale(BaseRequests):
     def __init__(self, city, csv_file):
@@ -60,14 +61,13 @@ class Resale(BaseRequests):
                 'url': url,
                 'description': description
             }
-
+            print(item)
             with open(self.csv_file, 'a', encoding='utf-8') as f:
+
                 f.write(f'{item["site"]},{item["category"]},{item["price"]},{item["url"]},{item["description"]}\n')
 
 
 if __name__ == '__main__':
-    city = 'praia_do_forte'
-    # city = sys.argv[1]
-    # csv_file = sys.argv[2]
-    csv_file = 'teste.csv'
+    city = sys.argv[1]
+    csv_file = sys.argv[2]
     Resale(city, csv_file)

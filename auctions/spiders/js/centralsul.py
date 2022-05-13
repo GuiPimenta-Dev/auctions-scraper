@@ -4,6 +4,9 @@ import sys
 import requests
 
 from base import BaseRequests
+from auctions.utils.parser import Parser
+
+parser = Parser()
 
 
 class CentralSul(BaseRequests):
@@ -37,14 +40,12 @@ class CentralSul(BaseRequests):
                 'url': url,
                 'description': description
             }
-
-            self.write_csv(csv_file=csv_file, item=item)
+            if self.city in parser.normalize_string(item['description']) or self.city in parser.normalize_string(
+                    item['url']):
+                self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':
-    city = 'curitiba'
-    # city = sys.argv[1]
-    csv_file = 'teste.json'
-    # csv_file = sys.argv[2]
+    city = sys.argv[1]
+    csv_file = sys.argv[2]
     CentralSul(city, csv_file)
-

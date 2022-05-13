@@ -1,9 +1,10 @@
 # coding=utf8
 import sys
 
+from auctions.utils.parser import Parser
 from base import BaseRequests
 
-
+parser = Parser()
 class CanalJudicial(BaseRequests):
 
     def __init__(self, city, csv_file):
@@ -99,13 +100,11 @@ class CanalJudicial(BaseRequests):
                 'url': url,
                 'description': description
             }
-
-            self.write_csv(csv_file=csv_file, item=item)
+            if self.city in parser.normalize_string(item['description']) or self.city in parser.normalize_string(item['url']):
+                self.write_csv(csv_file=csv_file, item=item)
 
 
 if __name__ == '__main__':
-    city = 'curitiba'
-    # city = sys.argv[1]
-    csv_file = 'teste.csv'
-    # csv_file = sys.argv[2]
+    city = sys.argv[1]
+    csv_file = sys.argv[2]
     CanalJudicial(city, csv_file)
